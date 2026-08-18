@@ -1,0 +1,8 @@
+.vscode/
+.github/
+certs/
+deploy/
+src/tests/
+dist/tests/
+*.yml
+Dockerfile

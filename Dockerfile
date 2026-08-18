@@ -1,0 +1,48 @@
+FROM node:26-alpine
+RUN apk add --no-cache tini
+
+ENV CASTING_SERVER_TMP_SIZE=32gb
+ENV CASTING_SERVER_DB_DATABASE=Casting800Test
+ENV CASTING_SERVER_DB_HOST=test-casting-800.database.windows.net
+ENV CASTING_SERVER_DB_PORT=1433
+ENV CASTING_SERVER_DB_USER=casting800live
+ENV CASTING_SERVER_DB_PASSWORD=YojanaCredit%224@India
+ENV CASTING_SERVER_REVERSE_ERP_PROXY=old-test.800casting.com
+ENV CASTING_SERVER_REVERSE_HYBRID_JET_PROXY=v2018-test.800casting.com
+ENV CASTING_SERVER_REVERSE_HYBRID_STATIC_SITE=800casting.socialmail.in
+ENV CASTING_SERVER_SOCIAL_MAIL_HOST=social-test.800casting.com
+ENV CASTING_SERVER_SOCIAL_MAIL_KEY=@3c56a70860e146c796956b82973aef98
+ENV CASTING_SERVER_SOCIAL_MAIL_ACCESS_TOKEN=sm-at-1-0835bf48f18a474a9ea7c995f72d1d7d
+ENV CASTING_SERVER_REVERSE_PROXY=old-test.800casting.com
+ENV CASTING_SERVER_REVERSE_PROXY_COOKIE_NAME=.CATest
+ENV CASTING_SERVER_PUBLIC_KEY=800casting-public-key
+ENV CASTING_SERVER_COOKIE_NAME=.C8
+ENV CASTING_SERVER_NS_MAILER_HOST=ns-mailer.neurospeech.com
+ENV CASTING_SERVER_NS_MAILER_KEY=1
+ENV CASTING_SERVER_NS_MAILER_ACCESS_TOKEN=sm-at-1-12170a149f354cc185a647ab8018828e
+ENV APP_HOST=v2025-test.800casting.com
+
+ENV FILE_CONVERSION_SERVER_PORT=/fcs/sockets/fcs.sock
+ENV LOCAL_CACHE_PORT=/fcs/local-cache.sock
+
+VOLUME /data
+VOLUME /cache
+WORKDIR /app
+
+
+ENV HOST=0.0.0.0
+ENV SELF_HOST=true
+
+EXPOSE 80 443 9229
+ENTRYPOINT ["/sbin/tini", "--", "npm", "start"]
+
+COPY package*.json ./
+
+RUN --mount=type=cache,target=/root/.npm npm install --omit=dev --cache /root/.npm --prefer-offline
+
+COPY index.js ./
+COPY images ./images
+COPY content ./content
+
+COPY src ./src
+COPY dist ./dist

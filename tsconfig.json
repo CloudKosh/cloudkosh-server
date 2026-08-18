@@ -1,0 +1,35 @@
+{
+    "compilerOptions": {
+        "jsx": "react",
+        "target": "ES2021",
+        "module":"NodeNext",
+        "incremental": true,
+        "sourceMap": true,
+        "outDir": "dist",
+        "rootDir": "./src",
+        "tsBuildInfoFile": "./dist/.tsbuildinfo",
+        "strict": false,
+        "skipDefaultLibCheck": true,
+        "skipLibCheck": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "noUnusedLocals": true,
+        "jsxFactory": "XNode.create",
+        "types": ["node"],
+        "lib": [
+            "ES2018",
+            "ES2021.WeakRef",
+            "esnext.disposable",
+            "ES2021.String",
+            "ES2022.Object"
+        ]
+    },
+    "include": [
+        "src/**/*",
+        "src/wwwroot/routes/.well-known/**/*"
+   ],
+    "exclude": [
+		"node_modules",
+		"tests"
+    ]
+}
