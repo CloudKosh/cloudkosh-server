@@ -22,7 +22,7 @@
     "@aws-sdk/client-s3": "^3.1156.0",
     "@aws-sdk/client-ses": "^3.1156.0",
     "@azure/storage-blob": "^12.34.0",
-    "@entity-access/entity-access": "^1.2.50",
+    "@entity-access/entity-access": "^1.2.51",
     "@entity-access/server-pages": "^1.1.681",
     "@web-atoms/fetch-builder": "^1.0.34",
     "console-log-colors": "^0.5.0",
