@@ -62,7 +62,6 @@ export default abstract class WebServer {
             port,
             protocol: "http",
             trustProxy: true,
-            acmeOptions: null,
             allowHTTP1: true,
             http1Port: 8888
         });
