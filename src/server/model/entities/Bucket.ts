@@ -29,8 +29,12 @@ import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
     filter: (x) => x.host !== null
 })
 @CheckConstraint({
-    name: "CC_Valid_HostName",
+    name: "CC_Bucket_Valid_HostName",
     filter: (x) => x.host === null || Sql.regex.like(x.host, "^[a-z0-9\\-]+$", "i")
+})
+@CheckConstraint({
+    name: "CC_Bucket_Valid_Name",
+    filter: (x) => Sql.regex.like(x.name, "^[a-z0-9\\-]+$", "i")
 })
 export default class Bucket {
 
