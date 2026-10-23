@@ -19,6 +19,13 @@ import Namespace from "./Namespace.js";
         { name: (x) => x.name , descending: false }
     ]
 })
+@Index({
+    name: "IX_Bucket_Host",
+    columns: [
+        { name: (x) => x.host, descending: false }
+    ],
+    filter: (x) => x.host !== null
+})
 export default class Bucket {
 
     @Column({ dataType: "BigInt", key: true, generated: "identity"})
@@ -33,6 +40,13 @@ export default class Bucket {
 
     @Column({ dataType: "Char", length: 200 })
     name: string;
+
+    /**
+     * If specified, object can be read as public from this host,
+     * useful for setting up CDN
+     */
+    @Column({ dataType: "Char", length: 200 })
+    host: string;
 
     namespace: Namespace;
 

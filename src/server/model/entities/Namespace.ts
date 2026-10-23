@@ -2,6 +2,7 @@ import Column from "@entity-access/entity-access/dist/decorators/Column.js";
 import Index from "@entity-access/entity-access/dist/decorators/Index.js";
 import Table from "@entity-access/entity-access/dist/decorators/Table.js";
 import type Bucket from "./Bucket.js";
+import type NamespaceStorage from "./NamespaceStorage.js";
 
 /**
  * Id is a key because change of namespace display name
@@ -24,5 +25,6 @@ export default class Namespace {
     @Column({ dataType: "Char", nullable: true})
     description: string;
     buckets: Bucket[];
+    storages: NamespaceStorage[];
 
 }
