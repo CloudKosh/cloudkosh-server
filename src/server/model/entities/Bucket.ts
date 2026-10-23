@@ -1,8 +1,10 @@
+import CheckConstraint from "@entity-access/entity-access/dist/decorators/CheckConstraint.js";
 import Column from "@entity-access/entity-access/dist/decorators/Column.js";
 import Index from "@entity-access/entity-access/dist/decorators/Index.js";
 import Table from "@entity-access/entity-access/dist/decorators/Table.js";
 import { RelateTo } from "@entity-access/entity-access/dist/decorators/Relate.js";
 import Namespace from "./Namespace.js";
+import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
 
 @Table("Buckets")
 @Index({
@@ -25,6 +27,10 @@ import Namespace from "./Namespace.js";
         { name: (x) => x.host, descending: false }
     ],
     filter: (x) => x.host !== null
+})
+@CheckConstraint({
+    name: "CC_Valid_HostName",
+    filter: (x) => x.host === null || Sql.regex.like(x.host, "^[a-z0-9\\-]+$", "i")
 })
 export default class Bucket {
 
