@@ -81,7 +81,7 @@ export default class extends Page {
                 break;
         }
 
-        const results = await q.toPage(
+        const results = await sorted.toPage(
             start,
             size,
         );
