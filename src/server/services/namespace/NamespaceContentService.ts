@@ -8,7 +8,6 @@ import StorageService from "./StorageService.js";
 import Range from "../../../common/Range.js";
 import NamespaceContent from "../../model/entities/NamespaceContent.js";
 import ServerLogger from "@entity-access/server-pages/dist/core/ServerLogger.js";
-import sleep from "../../../common/sleep.js";
 import { areFilesEqual } from "../../../common/files/FileApi.js";
 
 @RegisterScoped
@@ -27,9 +26,11 @@ export default class NamespaceContentService {
     private storageService: StorageService;
 
     async save(namespaceID, file: LocalFile) {
-        let contentID = 0;
 
         const sha256Base24 = await this.hashService.hash(file);
+
+        // we are assuming that 256mb would be saved in 90 seconds...
+        // however even blocks of 64mb can be saved..
 
         for await(const _r of Range.timeRange(90000,15000)) {
 
