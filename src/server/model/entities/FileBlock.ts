@@ -22,7 +22,7 @@ export default class FileBlock {
     contentID: number;
 
     @Column({ dataType: "BigInt", key: true })
-    orderID: number;
+    order: number;
 
     file: BucketFile;
 

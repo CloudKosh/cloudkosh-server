@@ -5,6 +5,7 @@ import type Bucket from "./Bucket.js";
 import type NamespaceStorage from "./NamespaceStorage.js";
 import CheckConstraint from "@entity-access/entity-access/dist/decorators/CheckConstraint.js";
 import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
+import type NamespaceContent from "./NamespaceContent.js";
 
 /**
  * Id is a key because change of namespace display name
@@ -32,5 +33,6 @@ export default class Namespace {
     description: string;
     buckets: Bucket[];
     storages: NamespaceStorage[];
+    contents: NamespaceContent[];
 
 }

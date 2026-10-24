@@ -28,6 +28,9 @@ export default class BucketFile {
     @Column({ dataType: "Char", length: 400, default: () => "application/octet-stream" })
     contentType: string;
 
+    @Column({ dataType: "BigInt", default: () => 0})
+    size: number;
+
     @Column({
         dataType: "Int",
         computed: (x) =>

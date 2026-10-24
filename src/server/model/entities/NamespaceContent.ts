@@ -3,12 +3,22 @@ import Table from "@entity-access/entity-access/dist/decorators/Table.js";
 import type FileBlock from "./FileBlock.js";
 import type BucketFile from "./BucketFile.js";
 import type FileVersionBlock from "./FileVersionBlock.js";
+import { RelateTo } from "@entity-access/entity-access/dist/decorators/Relate.js";
+import Namespace from "./Namespace.js";
+import type StorageContent from "./StorageContent.js";
 
 @Table("NamespaceContents")
 export default class NamespaceContent {
 
     @Column({dataType: "BigInt", key: true, generated: "identity"})
     contentID: number;
+
+    @Column({ dataType: "BigInt"})
+    @RelateTo(Namespace, {
+        property: (x) => x.namespace,
+        inverseProperty: (x) => x.contents
+    })
+    namespaceID: number;
 
     @Column({ dataType: "Char", length: 200})
     sha256Base24: string;
@@ -23,4 +33,8 @@ export default class NamespaceContent {
 
     files: BucketFile[];
     fileVersionBlocks: FileVersionBlock[];
+
+    namespace: Namespace;
+    storageContents: StorageContent[];
+    
 }
