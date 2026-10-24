@@ -17,6 +17,10 @@ export default class BucketFileService {
     @Inject
     contentService: NamespaceContentService;
 
+    getFile(namespace: string, bucket: string, arg2: string) {
+        throw new Error("Method not implemented.");
+    }
+
     async saveFile({
         bucket: { bucketID, namespaceID },
         path,

@@ -3,9 +3,9 @@ import Page from "@entity-access/server-pages/dist/Page.js";
 import KoshDbContext from "../../../../../../../server/model/KoshDbContext.js";
 import { Route } from "@entity-access/server-pages/dist/core/Route.js";
 import { Query } from "@entity-access/server-pages/dist/core/Query.js";
-import { Prepare } from "@entity-access/server-pages/dist/decorators/Prepare.js";
+import { requireAuthorization } from "../../../../../../../common/requireAuthorization.js";
 
-@Prepare.authorize
+@requireAuthorization
 export default class extends Page {
 
     @Route("namespace")
