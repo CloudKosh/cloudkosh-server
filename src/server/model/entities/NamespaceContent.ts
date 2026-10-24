@@ -2,6 +2,7 @@ import Column from "@entity-access/entity-access/dist/decorators/Column.js";
 import Table from "@entity-access/entity-access/dist/decorators/Table.js";
 import type FileBlock from "./FileBlock.js";
 import type BucketFile from "./BucketFile.js";
+import type FileVersionBlock from "./FileVersionBlock.js";
 
 @Table("NamespaceContents")
 export default class NamespaceContent {
@@ -21,4 +22,5 @@ export default class NamespaceContent {
     fileBlocks: FileBlock[];
 
     files: BucketFile[];
+    fileVersionBlocks: FileVersionBlock[];
 }
