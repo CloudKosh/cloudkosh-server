@@ -9,6 +9,7 @@ import Range from "../../../common/Range.js";
 import NamespaceContent from "../../model/entities/NamespaceContent.js";
 import ServerLogger from "@entity-access/server-pages/dist/core/ServerLogger.js";
 import { areFilesEqual } from "../../../common/files/FileApi.js";
+import DiskCacheService from "../cache/DiskCacheService.js";
 
 @RegisterScoped
 export default class NamespaceContentService {
@@ -24,6 +25,33 @@ export default class NamespaceContentService {
 
     @Inject
     private storageService: StorageService;
+
+    @Inject
+    private diskCache: DiskCacheService;
+
+    async download(content: NamespaceContent) {
+        const { namespaceID, contentID, sha256Base24 } = content;
+
+        const path = `local-content-cache/${contentID}`;
+
+        return await this.diskCache.getOrCreateAsync(path, async (lf) =>{
+
+            // we should wait if someone is still saving the file for same content id
+            await using _lock = await this.lockService.lock(`save-content-${namespaceID}-${sha256Base24}`);
+
+            const storageContent = await this.db.storageContents
+                .where(content,
+                    (x, p) => x.contentID === p.contentID && x.ready === true
+                )
+                .orderByDescending((x) => x.storage.readPriority)
+                .include((x) => [x.storage])
+                .first();
+
+            await this.storageService.downloadTo(storageContent, lf);
+
+        });
+
+    }
 
     async save(namespaceID, file: LocalFile) {
 

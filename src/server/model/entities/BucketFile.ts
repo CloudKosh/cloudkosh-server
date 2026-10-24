@@ -4,6 +4,7 @@ import Table from "@entity-access/entity-access/dist/decorators/Table.js";
 import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
 import type FileBlock from "./FileBlock.js";
 import type BucketFileVersion from "./BucketFileVersion.js";
+import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 
 @Table("BucketFiles")
 @Index({
@@ -30,6 +31,9 @@ export default class BucketFile {
 
     @Column({ dataType: "BigInt", default: () => 0})
     size: number;
+
+    @Column({ dataType: "DateTime", default: () => Sql.date.now()})
+    dateUpdated: DateTime;
 
     @Column({
         dataType: "Int",

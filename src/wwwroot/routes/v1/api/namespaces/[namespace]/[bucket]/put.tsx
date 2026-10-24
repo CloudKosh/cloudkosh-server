@@ -1,12 +1,16 @@
 import Inject from "@entity-access/entity-access/dist/di/di.js";
 import Page from "@entity-access/server-pages/dist/Page.js";
-import KoshDbContext from "../../../../../../../server/model/KoshDbContext.js";
 import { Route } from "@entity-access/server-pages/dist/core/Route.js";
-import { Query } from "@entity-access/server-pages/dist/core/Query.js";
 import { requireAuthorization } from "../../../../../../../common/requireAuthorization.js";
+import BucketService from "../../../../../../../server/services/bucket/BucketService.js";
+import BucketFileService from "../../../../../../../server/services/files/BucketFileService.js";
+import DiskCacheService from "../../../../../../../server/services/cache/DiskCacheService.js";
 
 @requireAuthorization
-export default class extends Page {
+export default class extends Page<{
+    urls: string[],
+    keys: string[]
+}> {
 
     @Route("namespace")
     namespace: string;
@@ -14,22 +18,26 @@ export default class extends Page {
     @Route("bucket")
     bucket: string;
 
-    @Query("sourceUrl")
-    sourceUrl: string;
+    @Inject fileService: BucketFileService;
 
-    @Inject db: KoshDbContext;
+    @Inject bucketService: BucketService;
+
+    @Inject diskCache: DiskCacheService;
 
     async run() {
 
-        const { namespace, bucket } = this;
+        const { keys, urls } = this.body;
 
-        const bucketEntity = await this.db.buckets
-            .filtered("modify")
-            .where({ namespace, bucket }, (x, p) => x.namespace.name === p.namespace && x.name === p.bucket)
-            .first();
-
-        // create file...
-
-        return this.notFound();
+        const bucket = await this.bucketService.getBucket(this.namespace, this.bucket);
+        await this.fileService.saveFile({
+            bucket,
+            path: this.childPath.join("/"),
+            urls,
+            keys
+        });
+        return this.json({
+            saved: this.childPath.join("/")
+        })
     }
+
 }

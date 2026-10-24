@@ -46,7 +46,7 @@ export default class Bucket {
         property: (x) => x.namespace,
         inverseProperty: (x) => x.buckets
     })
-    namespaceID: string;
+    namespaceID: number;
 
     @Column({ dataType: "Char", length: 200 })
     name: string;
