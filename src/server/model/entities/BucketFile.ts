@@ -32,13 +32,20 @@ export default class BucketFile {
     @Column({ dataType: "BigInt", default: () => 0})
     size: number;
 
+    
+    @Column({ dataType: "DateTime", default: () => Sql.date.now()})
+    dateCreated: DateTime;
+
     @Column({ dataType: "DateTime", default: () => Sql.date.now()})
     dateUpdated: DateTime;
 
+    /**
+     * depth should be 1 at root, so zero can be used to search for all depths.
+     */
     @Column({
         dataType: "Int",
         computed: (x) =>
-            Sql.text.length(
+            1 + Sql.text.length(
                 Sql.text.replace(x.path, ' ', '*')
             ) - Sql.text.length(
                 Sql.text.replace(x.path, '/', '')

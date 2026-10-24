@@ -4,6 +4,7 @@ import Table from "@entity-access/entity-access/dist/decorators/Table.js";
 import BucketFile from "./BucketFile.js";
 import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
+import type FileVersionBlock from "./FileVersionBlock.js";
 
 @Table("BucketFileVersions")
 export default class BucketFileVersion {
@@ -22,4 +23,5 @@ export default class BucketFileVersion {
     dateCreated: DateTime;
 
     file: BucketFile;
+    versionBlocks: FileVersionBlock[];
 }

@@ -51,8 +51,12 @@ class AppCluster extends ClusterInstance<AppServer> {
             }
         }
 
-        const { isTestMode, isDevTestMode, isProductionServer, reverseProxy: { cookieName, erpHost, hybridJetHost } } = globalEnv;
-        console.log(JSON.stringify({ isTestMode, isDevTestMode, isProductionServer, reverseProxy: { cookieName, erpHost, hybridJetHost } }));
+        const { isTestMode, isDevTestMode, isProductionServer } = globalEnv;
+        console.log(JSON.stringify({
+            isTestMode,
+            isDevTestMode,
+            isProductionServer
+        }));
         return arg.init();
     }
 
