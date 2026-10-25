@@ -11,6 +11,16 @@ import SessionSecurity from "@entity-access/server-pages/dist/services/SessionSe
 import AppWorkflowContext from "./server/workflows/AppWorkflowContext.js";
 import PostgreSqlDriver from "@entity-access/entity-access/dist/drivers/postgres/PostgreSqlDriver.js";
 
+
+declare module "@entity-access/server-pages/dist/core/SessionUser.js" {
+    // eslint-disable-next-line @typescript-eslint/naming-convention, no-shadow
+    interface SessionUser {
+        keyPath: string;
+        namespaces: number[];
+    }
+}
+
+
 export default abstract class WebServer {
 
     abstract register();

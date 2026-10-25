@@ -3,6 +3,8 @@ import Table from "@entity-access/entity-access/dist/decorators/Table.js";
 import Index from "@entity-access/entity-access/dist/decorators/Index.js";
 import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 import type NamespaceUser from "./NamespaceUser.js";
+import type AccessToken from "./AccessToken.js";
+import type LoginSession from "./LoginSession.js";
 
 export const userStatuses = ["active", "blocked", "locked"] as const;
 export type userStatusType = typeof userStatuses[number];
@@ -33,4 +35,6 @@ export default class User {
     @Column( {dataType: "DateTime"})
     public dateCreated: DateTime;
     namespaceUsers: NamespaceUser[];
+    accessTokens: AccessToken[];
+    sessions: LoginSession[];
 }

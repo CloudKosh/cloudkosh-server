@@ -11,6 +11,7 @@ import NamespaceContent from "./entities/NamespaceContent.js";
 import NamespaceStorage from "./entities/NamespaceStorage.js";
 import DbLock from "./entities/DbLock.js";
 import StorageContent from "./entities/StorageContent.js";
+import LoginSession from "./entities/LoginSession.js";
 
 export default class KoshDbContext extends AppDbContext {
 
@@ -27,6 +28,8 @@ export default class KoshDbContext extends AppDbContext {
     public fileBlocks = this.model.register(FileBlock);
 
     public fileVersionBlocks = this.model.register(FileVersionBlock);
+
+    public loginSessions = this.model.register(LoginSession);
 
     public namespaces = this.model.register(Namespace);
 

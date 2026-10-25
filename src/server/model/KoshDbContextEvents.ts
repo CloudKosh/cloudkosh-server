@@ -17,6 +17,8 @@ import NamespaceStorage from "./entities/NamespaceStorage.js";
 import NamespaceStorageEvents from "./events/NamespaceStorageEvents.js";
 import StorageContent from "./entities/StorageContent.js";
 import StorageContentEvents from "./events/StorageContentEvents.js";
+import LoginSession from "./entities/LoginSession.js";
+import LoginSessionEvents from "./events/LoginSessionEvents.js";
 
 export default class KoshDbContextEvents extends ContextEvents {
 
@@ -27,6 +29,7 @@ export default class KoshDbContextEvents extends ContextEvents {
         this.register(Bucket, BucketEvents);
         this.register(BucketFile, BucketFileEvents);
         this.register(FileBlock, FileBlockEvents);
+        this.register(LoginSession, LoginSessionEvents);
         this.register(Namespace, NamespaceEvents);
         this.register(NamespaceContent, NamespaceContentEvents);
         this.register(NamespaceStorage, NamespaceStorageEvents);
