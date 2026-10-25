@@ -3,6 +3,7 @@ import { RelateTo } from "@entity-access/entity-access/dist/decorators/Relate.js
 import Table from "@entity-access/entity-access/dist/decorators/Table.js";
 import { JsonProperty } from "@entity-access/server-pages/dist/services/ModelService.js";
 import User from "./User.js";
+import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 
 @Table("AccessTokens")
 export default class AccessToken {
@@ -18,7 +19,10 @@ export default class AccessToken {
     userID: number;
 
     @Column({ dataType: "Char", length: 400 })
-    encryptedSecret: string;
+    secretHash: string;
+
+    @Column({ dataType: "DateTime", nullable: true})
+    lastUsed: DateTime;
 
     
     /**

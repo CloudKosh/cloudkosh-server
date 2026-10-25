@@ -4,7 +4,7 @@ import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
 import EntityAccessError from "@entity-access/entity-access/dist/common/EntityAccessError.js";
 import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 import KoshDbContext from "../../model/KoshDbContext.js";
-import { ICacheContainer, ObjectCache } from "../../../common/cacheFor.js";
+import { cacheFor, ICacheContainer, ObjectCache } from "../../../common/cacheFor.js";
 
 @RegisterSingleton
 export default class AccessTokenService implements ICacheContainer<AccessTokenService> {
