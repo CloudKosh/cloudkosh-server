@@ -5,6 +5,8 @@ import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
 import type FileBlock from "./FileBlock.js";
 import type BucketFileVersion from "./BucketFileVersion.js";
 import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
+import { RelateTo } from "@entity-access/entity-access/dist/decorators/Relate.js";
+import Bucket from "./Bucket.js";
 
 @Table("BucketFiles")
 @Index({
@@ -21,6 +23,10 @@ export default class BucketFile {
     bucketFileID: number;
 
     @Column( {dataType: "BigInt"})
+    @RelateTo(Bucket, {
+        property: (x) => x.bucket,
+        inverseProperty: (x) => x.bucketFiles
+    })
     bucketID: number;
 
     @Column({ dataType: "Char", length: 1024})
@@ -54,6 +60,7 @@ export default class BucketFile {
     })
     depth: number;
 
+    bucket: Bucket;
     blocks: FileBlock[];
     versions: BucketFileVersion[];
 

@@ -5,6 +5,7 @@ import Table from "@entity-access/entity-access/dist/decorators/Table.js";
 import { RelateTo } from "@entity-access/entity-access/dist/decorators/Relate.js";
 import Namespace from "./Namespace.js";
 import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
+import type BucketFile from "./BucketFile.js";
 
 @Table("Buckets")
 @Index({
@@ -59,5 +60,6 @@ export default class Bucket {
     host: string;
 
     namespace: Namespace;
+    bucketFiles: BucketFile[];
 
 }
