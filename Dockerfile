@@ -41,7 +41,6 @@ COPY package*.json ./
 RUN --mount=type=cache,target=/root/.npm npm install --omit=dev --cache /root/.npm --prefer-offline
 
 COPY index.js ./
-COPY images ./images
 COPY content ./content
 
 COPY src ./src
