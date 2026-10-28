@@ -19,11 +19,6 @@ export default class extends Page {
             </form>
         </AppLayout>;
 
-        console.log(JSON.stringify({
-            doc: typeof doc,
-            name: doc.name
-        }))
-
-        return this.html(doc);
+        return doc;
     }
 }

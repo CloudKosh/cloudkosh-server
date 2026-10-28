@@ -6,12 +6,12 @@ import { Prepare } from "@entity-access/server-pages/dist/decorators/Prepare.js"
 @Prepare.authorizeRedirect((x) => x.userID > 0, "/ui/app/login")
 export default class extends Page {
     async run() {
-        return this.html(<HtmlDocument>
+        return <HtmlDocument>
             <body>
                 <section>
                     
                 </section>
             </body>
-        </HtmlDocument>);
+        </HtmlDocument>;
     }
 }

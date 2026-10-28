@@ -29,30 +29,6 @@
             ]
         },
         {
-            "name": "Attach to Process 1",
-            "type": "node",
-            "request": "attach",
-            "port": 9230,
-            "localRoot": "${workspaceRoot}",
-            "remoteRoot": "/app/",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js",
-                "${workspaceFolder}/node_modules/@entity-access/**/*.js",
-            ]
-        },
-        {
-            "name": "Attach to Process 2",
-            "type": "node",
-            "request": "attach",
-            "port": 9231,
-            "localRoot": "${workspaceRoot}",
-            "remoteRoot": "/app/",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js",
-                "${workspaceFolder}/node_modules/@entity-access/**/*.js",
-            ]
-        },
-        {
             "type": "node",
             "request": "launch",
             "name": "Test Selected File",
