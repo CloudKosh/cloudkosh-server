@@ -16,7 +16,7 @@ const isProductionServer = /true/i.test(process.env.CLOUD_KOSH_IS_PRODUCTION || 
 
 const serverID = process.env.CLOUD_KOSH_SERVER_ID || hostname();
 
-let database = process.env.CLOUD_KOSH_DB_DATABASE ?? "Casting800Test";
+let database = process.env.CLOUD_KOSH_DB_DATABASE ?? "CloudKosh";
 const testDatabase = process.env.CLOUD_KOSH_DB_TEST_MODE;
 if (testDatabase) {
     database = `${database}_${Date.now()}`;
@@ -59,13 +59,13 @@ export const globalEnv = {
         npmVersionKey: process.env.CLOUD_KOSH_GIT_PACKAGES_NAME ?? "GitPackages"
     },
     db: {
-        server: process.env.CLOUD_KOSH_DB_SERVER ?? "sql-server",
+        server: process.env.CLOUD_KOSH_DB_SERVER ?? "postgres",
         database,
         host: process.env.CLOUD_KOSH_DB_HOST ?? "localhost",
-        port: Number(process.env.CLOUD_KOSH_DB_PORT ?? 1433),
-        ssl: process.env.CLOUD_KOSH_DB_SSL ?? "null",
-        user: process.env.CLOUD_KOSH_DB_USER ?? "sa",
-        password: process.env.CLOUD_KOSH_DB_PASSWORD ?? "$Abcd123",
+        port: Number(process.env.CLOUD_KOSH_DB_PORT ?? 5432),
+        ssl:  JSON.parse(process.env.CLOUD_KOSH_DB_SSL ?? "null"),
+        user: process.env.CLOUD_KOSH_DB_USER ?? "postgres",
+        password: process.env.CLOUD_KOSH_DB_PASSWORD ?? "abcd123",
     },
     socialMail: {
         host: process.env.CLOUD_KOSH_SOCIAL_MAIL_HOST,

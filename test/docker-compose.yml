@@ -22,12 +22,17 @@ services:
     volumes:
       - ck-sockets:/sockets
       - ck-cache:/cache
+    networks:
+      - ck_network
+
   db:
     image: postgis/postgis:18-3.6-alpine
     container_name: cloudkosh-test-db
     restart: unless-stopped
     environment:
       - POSTGRES_PASSWORD=abcd123
+    networks:
+      - ck_network
     ports:
       - 5432:5432
   app:
@@ -40,6 +45,8 @@ services:
     command: -- npm run debug
     environment:
       - PORT=/sockets/web-server.sock
+      - CLOUD_KOSH_DB_HOST=cloudkosh-test-db
+      - CLOUD_KOSH_DB_SSL=false
       - CLOUDKOSH_TEST_MODE=true
     volumes:
       - ck-sockets:/sockets

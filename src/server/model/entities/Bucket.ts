@@ -42,7 +42,7 @@ export default class Bucket {
     @Column({ dataType: "BigInt", key: true, generated: "identity"})
     bucketID: number;
 
-    @Column({ dataType: "BigInt", length: 200})
+    @Column({ dataType: "BigInt"})
     @RelateTo(Namespace, {
         property: (x) => x.namespace,
         inverseProperty: (x) => x.buckets
