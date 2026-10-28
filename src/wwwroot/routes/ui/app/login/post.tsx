@@ -57,6 +57,8 @@ export default class extends Page {
                 expiry: DateTime.from(expiry),
                 userID,
                 status: "created",
+                start: dateUpdated,
+                invalid: false,
                 dateUpdated,
                 ipAddress: this.request.remoteIPAddress,
             })
