@@ -42,7 +42,7 @@ export default abstract class WebServer {
 
         globalServices.add(BaseDriver, driver);
 
-        this.register();
+        this.register?.();
 
         // register services...
         await seed();

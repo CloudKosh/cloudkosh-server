@@ -1,37 +1,10 @@
 /* eslint-disable no-console */
-import WebServer from "./WebServer.js";
-import { ServiceCollection } from "@entity-access/entity-access/dist/di/di.js";
-import ContextEvents from "@entity-access/entity-access/dist/model/events/ContextEvents.js";
-import AppDbContext from "@entity-access/server-pages/dist/core/AppDbContext.js";
 
 import ClusterInstance from "@entity-access/server-pages/dist/ClusterInstance.js";
 import { globalEnv } from "./globalEnv.js";
-import AuthorizationService from "@entity-access/server-pages/dist/services/AuthorizationService.js";
 import { existsSync, unlinkSync } from "node:fs";
-import KoshWorkflowContext from "./server/workflows/KoshWorkflowContext.js";
-import KoshDbContext from "./server/model/KoshDbContext.js";
-import KoshDbContextEvents from "./server/model/KoshDbContextEvents.js";
-import AppWorkflowContext from "./server/workflows/AppWorkflowContext.js";
-import CloudKoshAuthService from "./server/services/auth/CloudKoshAuthService.js";
+import AppServer from "./AppServer.js";
 
-
-
-class AppServer extends WebServer {
-
-    register() {
-        ServiceCollection.registerMultiple("Singleton", [AppWorkflowContext, KoshWorkflowContext], KoshWorkflowContext);
-        ServiceCollection.registerMultiple("Scoped", [AppDbContext, KoshDbContext], KoshDbContext);
-        ServiceCollection.registerMultiple("Singleton", [ContextEvents, KoshDbContextEvents], KoshDbContextEvents);
-
-        // we will set differently when we go live
-        ServiceCollection.registerMultiple("Singleton", [AuthorizationService], CloudKoshAuthService);
-
-        if (globalEnv.isDevTestMode) {
-            // register test storage services...
-            import("./tests/registerTestStorage.js").catch(console.error);
-        }
-    }
-}
 
 class AppCluster extends ClusterInstance<AppServer> {
 
