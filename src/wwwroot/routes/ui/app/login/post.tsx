@@ -10,6 +10,7 @@ import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 import HtmlDocument from "@entity-access/server-pages/dist/html/HtmlDocument.js";
 
 @Prepare.parseForm
+@Prepare.authorize
 export default class extends Page {
 
     @Inject
@@ -63,7 +64,7 @@ export default class extends Page {
                 ipAddress: this.request.remoteIPAddress,
             })
 
-            this.sessionUser.setAuthCookie({
+            await this.sessionUser.setAuthCookie({
                 expiry: DateTime.now.addDays(1).asJSDate,
                 sessionID,
                 userID
