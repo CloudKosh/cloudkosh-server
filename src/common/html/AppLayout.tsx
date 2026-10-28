@@ -8,6 +8,7 @@ export default function AppLayout({ title }, ... nodes: XNode[]) {
         <head>
             <title>{title}</title>
             <link rel="stylesheet" href={StaticResource.toCDN(import.meta.resolve("./AppLayout.global.css"))}></link>
+            <script type="module" src={StaticResource.toCDN(import.meta.resolve("@social-mail/web-components/dist/main.js"))}></script>
         </head>
         <body>
             <header>
