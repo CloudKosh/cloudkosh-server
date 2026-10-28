@@ -25,6 +25,11 @@ export default async function seed() {
 
     if (!migrated) {
         return;
-    }    
+    }
 
+    await db.users.withKeys({
+        emailAddress: globalEnv.adminEmail,
+        roles: "admin",
+        status: "active"
+    }).selectOrInsert();
 }

@@ -30,6 +30,7 @@ export const globalEnv = {
     port,
     serverPackage: process.env.npm_package_name,
     serverPackageVersion: process.env.npm_package_version,
+    adminEmail: process.env.CLOUD_KOSH_ADMIN_EMAIL || "admin@admin",
     serverID,
     version,
     isTestMode,

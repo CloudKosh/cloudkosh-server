@@ -34,6 +34,10 @@ export default class User {
 
     @Column( {dataType: "DateTime"})
     public dateCreated: DateTime;
+
+    @Column({ dataType: "Char", length: 400})
+    public roles: string;
+
     namespaceUsers: NamespaceUser[];
     accessTokens: AccessToken[];
     sessions: LoginSession[];

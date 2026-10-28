@@ -11,3 +11,7 @@ body {
         padding: 5px;
     }
 }
+
+menu-bar a {
+    text-decoration: none;
+}
