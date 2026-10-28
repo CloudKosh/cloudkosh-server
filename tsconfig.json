@@ -3,6 +3,7 @@
         "jsx": "react",
         "target": "ES2021",
         "module":"NodeNext",
+        "moduleResolution": "nodenext",
         "incremental": true,
         "sourceMap": true,
         "outDir": "dist",
