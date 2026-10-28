@@ -6,6 +6,7 @@ import { RelateTo } from "@entity-access/entity-access/dist/decorators/Relate.js
 import Namespace from "./Namespace.js";
 import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
 import type BucketFile from "./BucketFile.js";
+import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 
 @Table("Buckets")
 @Index({
@@ -58,6 +59,12 @@ export default class Bucket {
      */
     @Column({ dataType: "Char", length: 200 })
     host: string;
+
+    @Column({ dataType: "DateTime", default: () => Sql.date.now()})
+    dateCreated: DateTime;
+
+    @Column({ dataType: "BigInt", default: () => 0})
+    size: number;
 
     namespace: Namespace;
     bucketFiles: BucketFile[];

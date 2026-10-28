@@ -15,6 +15,7 @@ export default function AppLayout({ title }, ... nodes: XNode[]) {
                 <h4>Cloud Kosh</h4>
                 <menu-bar>
                     <a href="/ui/app">Home</a>
+                    <a href="/ui/app/namespaces">Namespaces</a>
                 </menu-bar>
             </header>
             <main>
