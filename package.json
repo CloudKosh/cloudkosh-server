@@ -1,6 +1,6 @@
 {
-  "name": "@casting-2025/casting-server-2025",
-  "version": "1.3.84",
+  "name": "@cloud-kosh/cloud-kosh-server",
+  "version": "1.0.1",
   "description": "## Phase 1",
   "main": "index.js",
   "type": "module",
