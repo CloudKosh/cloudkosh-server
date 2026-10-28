@@ -1,0 +1,13 @@
+html,body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    header, footer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 5px;
+    }
+}

@@ -8,6 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "push": "git add -A && git commit -m \"dep vb\" && npm version patch",
     "local-test": "node --enable-source-maps ./dist/tests/test.js",
+    "build-css": "npx postcss \"./src/**/*.css\" --base src --dir dist --map --verbose",
+    "build-css-watch": "npx postcss \"./src/**/*.css\" --base src --dir dist --map --verbose -w",
     "postversion": "git push --follow-tags",
     "start": "node --enable-source-maps --env-file-if-exists=/run/secrets/casting.env ./index.js",
     "debug": "node --enable-source-maps --inspect=0.0.0.0:9229 ./index.js",

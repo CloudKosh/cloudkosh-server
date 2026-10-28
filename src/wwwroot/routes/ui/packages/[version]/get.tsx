@@ -1,5 +1,5 @@
 import Page from "@entity-access/server-pages/dist/Page.js";
-import parseNodePath from "../../../../common/utils/parseNodePath.js";
+import parseNodePath from "../../../../../common/utils/parseNodePath.js";
 import { fileURLToPath } from "node:url";
 import { existsSync } from "node:fs";
 import { FileResult } from "@entity-access/server-pages/dist/Content.js";
