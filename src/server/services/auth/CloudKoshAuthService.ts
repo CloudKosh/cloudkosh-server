@@ -115,7 +115,7 @@ export default class CloudKoshAuthService extends AuthorizationService {
             userID: session.userID,
             expiry: session.expiry.asJSDate,
             namespaces: session.user?.namespaceUsers?.map((x) => x.namespaceID) ?? [],
-            roles:[] as string[],
+            roles: session.user.roles?.split(/[\,\;]/).map((x) => x.trim()).filter((x) => x) ?? ["user"],
             // roles: session.user.roles?.map((x) => x.roleName) ?? [],
             // fileAccessList: session.user.fileAccessList?.map(({ type, file: { path }}) => ({ type, path })) ?? [],
             // webSites: session.user.fileAccessList?.map((x) => x.file?.websiteFolder ? ({type: x.type, path: x.file.path, folderID: x.fileID}) : null)?.filter((x) => x) ?? [],
