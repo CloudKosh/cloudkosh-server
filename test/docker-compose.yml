@@ -10,8 +10,6 @@ services:
       - "443:443"
       - "443:443/udp"
     environment:
-      - FORWARD_ROUTE=/sockets/virtual-servers.sock
-      - FORWARD_HOST=web-server
       - FORWARD_PORT=/sockets/web-server.sock
       - FORWARD_SMTP_HOST=web-server
       - FORWARD_SMTP_PORT=/sockets/smtp-server.sock
@@ -19,6 +17,7 @@ services:
       - SELF_IPs=127.0.0.1
       - ACME_MODE=self-signed
       - FORWARD_SMTP_DISABLE_SPF=yes
+      - V1=1
     volumes:
       - ck-sockets:/sockets
       - ck-cache:/cache
