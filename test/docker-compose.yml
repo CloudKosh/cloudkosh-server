@@ -31,7 +31,6 @@ services:
     ports:
       - 5432:5432
   app:
-    # restart: on-failure
     container_name: cloudkosh-server
     image: cloudkosh-test-server
     build:
@@ -44,7 +43,7 @@ services:
       - CLOUDKOSH_TEST_MODE=true
     volumes:
       - ck-sockets:/sockets
-      - sm-cache:/cache
+      - ck-cache:/cache
     ports:
       - 9229:9229
     networks:
