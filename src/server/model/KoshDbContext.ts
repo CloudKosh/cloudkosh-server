@@ -12,6 +12,7 @@ import NamespaceStorage from "./entities/NamespaceStorage.js";
 import DbLock from "./entities/DbLock.js";
 import StorageContent from "./entities/StorageContent.js";
 import LoginSession from "./entities/LoginSession.js";
+import NamespaceUser from "./entities/NamespaceUser.js";
 
 export default class KoshDbContext extends AppDbContext {
 
@@ -36,6 +37,8 @@ export default class KoshDbContext extends AppDbContext {
     public namespaceContents = this.model.register(NamespaceContent);
 
     public namespaceStorages = this.model.register(NamespaceStorage);
+
+    public namespaceUsers = this.model.register(NamespaceUser);
 
     public storageContents = this.model.register(StorageContent);
 
