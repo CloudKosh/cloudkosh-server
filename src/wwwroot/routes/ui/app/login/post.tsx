@@ -25,7 +25,7 @@ export default class extends Page {
 
         let code = this.form.fields["code"];
 
-        if( encryptedCode && this.es.general.decrypt(encryptedCode) === code) {
+        if( encryptedCode && this.es.jsonToken.decrypt(encryptedCode) === code) {
             // setup login...
 
             const user = await this.db.users
@@ -36,6 +36,14 @@ export default class extends Page {
                 return this.html(<AppLayout title="Verification Failed">
                     <div>
                         Email address provided is not registered.
+                    </div>
+                </AppLayout>)
+            }
+
+            if(user.status !== "active") {
+                return this.html(<AppLayout title="Verification Failed">
+                    <div>
+                        User is {user.status}
                     </div>
                 </AppLayout>)
             }
@@ -72,7 +80,7 @@ export default class extends Page {
         code = Date.now().toString();
         code = code.substring(code.length-5);
 
-        encryptedCode = this.es.general.encrypt(code);
+        encryptedCode = this.es.jsonToken.encrypt(code);
 
         if(!globalEnv.smtp.host) {
             console.log(JSON.stringify({

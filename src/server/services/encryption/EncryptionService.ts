@@ -1,6 +1,7 @@
 import { RegisterSingleton } from "@entity-access/entity-access/dist/di/di.js";
 import crypto from "node:crypto";
 import { globalEnv } from "../../../globalEnv.js";
+import EntityAccessError from "@entity-access/entity-access/dist/common/EntityAccessError.js";
 
 const cache = new Map<string, { key, encryptionIV }>();
 
@@ -16,6 +17,19 @@ export default class EncryptionService {
         encrypt: (text: string, encoding: BufferEncoding = "base64url") => this.encrypt(text, globalEnv.publicKey, encoding),
         decrypt: (text: string, encoding: BufferEncoding = "base64url") => this.decrypt(text, globalEnv.publicKey, encoding)
     };
+
+    jsonToken = {
+        encrypt: (model: any, ttl = 5*60*1000) => {
+            return this.encrypt(JSON.stringify({ model, expires: Date.now() + ttl }), globalEnv.publicKey, "base64url")
+        },
+        decrypt: (text: string) => {
+            const { model, expires } = JSON.parse( this.decrypt(text, globalEnv.publicKey, "base64url"));
+            if(expires <= Date.now()) {
+                throw new EntityAccessError("Token expired");
+            }
+            return model;
+        }
+    }
 
     private encrypt(text: string, secretKey , encoding: BufferEncoding = "hex", host = "") {
         const { key, encryptionIV}  = this.createKey(secretKey, host);
