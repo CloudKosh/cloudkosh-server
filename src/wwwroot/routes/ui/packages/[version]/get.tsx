@@ -18,6 +18,8 @@ export default class extends Page {
             return this.notFound();
         }
 
+        this.cacheControl = "public,max-age=86002562";
+
         const { base: fileName } = parse(filePath);
 
         let contentType = mime.lookup(fileName) || "application/octet-stream";
