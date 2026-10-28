@@ -9,6 +9,7 @@ import EntityAccessError from "@entity-access/entity-access/dist/common/EntityAc
 import KoshDbContext from "../../model/KoshDbContext.js";
 import NamespaceContent from "../../model/entities/NamespaceContent.js";
 import DbLockService from "../db-lock/DbLockService.js";
+import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
 
 @RegisterSingleton
 export default class StorageService {
@@ -40,6 +41,10 @@ export default class StorageService {
         await using _lock = await this.dbLocks.lock(`save-${storageID}-${contentID}`);
 
         await using tx = await db.connection.createTransaction();
+
+        const size = file.contentSize;
+        await db.namespaces.where(content, (x, p) => x.id === p.namespaceID)
+                .update({ size }, (x, p) => ({ size: x.size + Sql.cast.asBigInt(p.size)}));
 
         const {
             endpoint,

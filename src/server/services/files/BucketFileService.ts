@@ -9,6 +9,7 @@ import DiskCacheService from "../cache/DiskCacheService.js";
 import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 import path from "path";
 import { link, unlink } from "fs/promises";
+import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
 
 @RegisterScoped
 export default class BucketFileService {
@@ -131,6 +132,9 @@ export default class BucketFileService {
             contentType: "application/octet-stream",
             size
         });
+
+        await this.db.buckets.where({ bucketID}, (x, p) => x.bucketID === p.bucketID)
+            .update({ size}, (x, p) => ({ size: x.size + Sql.cast.asBigInt(p.size) }))
 
         let order = 0;
 
