@@ -4,7 +4,8 @@ import AppLayout from "../../../../../common/html/AppLayout.js";
 
 export default class extends Page {
     async run() {
-        return this.html(<AppLayout title="Login">
+
+        const doc = <AppLayout title="Login">
             <form method="post">
                 <fieldset>
                     <legend>Email Address</legend>
@@ -16,6 +17,13 @@ export default class extends Page {
                     </div>
                 </fieldset>
             </form>
-        </AppLayout>);
+        </AppLayout>;
+
+        console.log(JSON.stringify({
+            doc: typeof doc,
+            name: doc.name
+        }))
+
+        return this.html(doc);
     }
 }

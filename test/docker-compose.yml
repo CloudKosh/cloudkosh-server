@@ -41,7 +41,7 @@ services:
       context: ../
       dockerfile: Dockerfile
     entrypoint: /sbin/tini
-    command: -- npm run debug
+    command: -- npm run dev
     environment:
       - PORT=/sockets/web-server.sock
       - CLOUD_KOSH_DB_HOST=cloudkosh-test-db

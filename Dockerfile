@@ -32,3 +32,4 @@ COPY content ./content
 
 COPY src ./src
 COPY dist ./dist
+COPY dev.js ./
