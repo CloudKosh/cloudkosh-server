@@ -5,6 +5,7 @@ import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 import type NamespaceUser from "./NamespaceUser.js";
 import type AccessToken from "./AccessToken.js";
 import type LoginSession from "./LoginSession.js";
+import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
 
 export const userStatuses = ["active", "blocked", "locked"] as const;
 export type userStatusType = typeof userStatuses[number];
@@ -22,20 +23,20 @@ export default class User {
     @Column({ dataType: "BigInt", key: true, generated: "identity" })
     public userID: number;
 
-    @Column({ dataType: "Char", length: 20, enum: userStatuses })
+    @Column({ dataType: "Char", length: 20, enum: userStatuses, default: () => "active" })
     public status: userStatusType;
 
-    @Column({ dataType: "Char", length: 200 })
+    @Column({ dataType: "Char", length: 200, nullable: true })
     public displayName: string;
 
     // is unique...
     @Column({ dataType: "Char", length: 200 })
     public emailAddress: string;    
 
-    @Column( {dataType: "DateTime"})
+    @Column( {dataType: "DateTime", default: () => Sql.date.now()})
     public dateCreated: DateTime;
 
-    @Column({ dataType: "Char", length: 400})
+    @Column({ dataType: "Char", length: 400, default: () => "user"})
     public roles: string;
 
     namespaceUsers: NamespaceUser[];
