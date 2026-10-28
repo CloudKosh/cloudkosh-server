@@ -1,6 +1,35 @@
 # docker-compose.yml
 version: "3"
 services:
+  proxy:
+    image: ghcr.io/social-mail/yarp-container:latest
+    container_name: cloudkosh-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      - FORWARD_ROUTE=/sockets/virtual-servers.sock
+      - FORWARD_HOST=web-server
+      - FORWARD_PORT=/sockets/web-server.sock
+      - FORWARD_SMTP_HOST=web-server
+      - FORWARD_SMTP_PORT=/sockets/smtp-server.sock
+      - AWS_ZONE_SUFFIX=.le.cloudkosh.com
+      - SELF_IPs=127.0.0.1
+      - ACME_MODE=self-signed
+      - FORWARD_SMTP_DISABLE_SPF=yes
+    volumes:
+      - ck-sockets:/sockets
+      - ck-cache:/cache
+  db:
+    image: postgis/postgis:18-3.6-alpine
+    container_name: cloudkosh-test-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=abcd123
+    ports:
+      - 5432:5432
   app:
     # restart: on-failure
     container_name: cloudkosh-server
@@ -11,17 +40,24 @@ services:
     entrypoint: /sbin/tini
     command: -- npm run debug
     environment:
-      - PORT=80
-      - CASTING_SERVER_DEV_TEST_MODE=true
-      # - CASTING_SERVER_DB_DATABASE=Casting800LiveTest
+      - PORT=/sockets/web-server.sock
+      - CLOUDKOSH_TEST_MODE=true
+    volumes:
+      - ck-sockets:/sockets
+      - sm-cache:/cache
     ports:
-      - 9991:80
       - 9229:9229
     networks:
       - ck_network
     dns:
       - 1.1.1.1
       - 8.8.8.8
+
+volumes:
+  ck-sockets:
+    external: false
+  ck-cache:
+    external: false
 
 networks:
   ck_network:
