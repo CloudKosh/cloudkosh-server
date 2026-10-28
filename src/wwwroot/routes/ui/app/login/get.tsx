@@ -4,7 +4,7 @@ import AppLayout from "../../../../../common/html/AppLayout.js";
 
 export default class extends Page {
     async run() {
-        return <AppLayout title="Login">
+        return this.html(<AppLayout title="Login">
             <form method="post">
                 <fieldset>
                     <legend>Email Address</legend>
@@ -16,6 +16,6 @@ export default class extends Page {
                     </div>
                 </fieldset>
             </form>
-        </AppLayout>;
+        </AppLayout>);
     }
 }
