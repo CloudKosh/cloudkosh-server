@@ -3,7 +3,6 @@ import AuthorizationService, { ICookie } from "@entity-access/server-pages/dist/
 import TimedCache from "@entity-access/entity-access/dist/common/cache/TimedCache.js";
 import MessagingService from "../messaging/MessagingService.js";
 import { SessionUser } from "@entity-access/server-pages/dist/core/SessionUser.js";
-import AccessTokenService from "../access-tokens/AccessTokenService.js";
 import { IAuthorizationCookie } from "@entity-access/server-pages/dist/services/IAuthorizationCookie.js";
 import KoshDbContext from "../../model/KoshDbContext.js";
 import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
@@ -25,9 +24,6 @@ export default class CloudKoshAuthService extends AuthorizationService {
     @Inject
     ms: MessagingService;
 
-    @Inject
-    ats: AccessTokenService;
-
     constructor() {
         super();
         process.nextTick(() => {
@@ -47,31 +43,8 @@ export default class CloudKoshAuthService extends AuthorizationService {
         return await super.authorizeRequest(user, p);
     }
 
-    async authorizeAccessToken(authorization: string, ip: string, user: SessionUser) {
-        const key = `${ip}:${authorization}`;
-        const info = await this.cache.getOrCreateAsync(key, async () => {
-            const session = await this.ats.createLoginSession(authorization, ip);
-            if (!session) {
-                return null;
-            }
-            return await this.loadSessionFromDb(session.sessionID);
-        });
-        if (!info) {
-            return;
-        }
-        user.sessionID = info.sessionID;
-        if (!info.userID) {
-            // delete cache. cache is invalid...
-            this.cache.delete(key);
-            return;
-        }
-        user.userID = info.userID;
-        user.roles = info.roles;
-        user.expiry = info.expiry;
-        user.keyPath = key;
-        user.namespaces = info.namespaces;
-        (user as any).isAuthorized = true;
-        this.userIDCache.getOrCreate(user.userID.toString(36), key, (c) => c);
+    authorizeAccessToken(authorization: string, ip: string, user: SessionUser) {
+        return this.loadUserSessionFromCookie(authorization, user);
     }
 
     async loadUserSessionFromCookie(cookie: string, user: SessionUser) {

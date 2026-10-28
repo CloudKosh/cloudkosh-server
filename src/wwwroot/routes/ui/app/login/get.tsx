@@ -9,10 +9,10 @@ export default class extends Page {
                 <fieldset>
                     <legend>Email Address</legend>
                     <div>
-                        <input id="email" placeholder="Email Address"/>
+                        <input name="email" placeholder="Email Address"/>
                     </div>
                     <div>
-                        
+                        <button type="submit">Request Code</button>
                     </div>
                 </fieldset>
             </form>
