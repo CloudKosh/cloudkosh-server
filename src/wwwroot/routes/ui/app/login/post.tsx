@@ -6,6 +6,8 @@ import { globalEnv } from "../../../../../globalEnv.js";
 import AppLayout from "../../../../../common/html/AppLayout.js";
 import XNode from "@entity-access/server-pages/dist/html/XNode.js";
 import EncryptionService from "../../../../../server/services/encryption/EncryptionService.js";
+import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
+import HtmlDocument from "@entity-access/server-pages/dist/html/HtmlDocument.js";
 
 @Prepare.parseForm
 export default class extends Page {
@@ -38,6 +40,33 @@ export default class extends Page {
                 </AppLayout>)
             }
 
+            const { userID } = user;
+
+            const expiry = DateTime.now.addDays(1).asJSDate;
+            const dateUpdated = DateTime.now;
+
+            const { sessionID } = await this.db.loginSessions.statements.insert({
+                expiry: DateTime.from(expiry),
+                userID,
+                status: "created",
+                dateUpdated,
+                ipAddress: this.request.remoteIPAddress,
+            })
+
+            this.sessionUser.setAuthCookie({
+                expiry: DateTime.now.addDays(1).asJSDate,
+                sessionID,
+                userID
+            });
+
+            return this.html(<HtmlDocument>
+                <head></head>
+                <body>
+                    <script>
+                        location.href = "/app";
+                    </script>
+                </body>
+            </HtmlDocument>);
         }
 
         code = Date.now().toString();
