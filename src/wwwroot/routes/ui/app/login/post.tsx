@@ -94,6 +94,7 @@ export default class extends Page {
         return this.html(<AppLayout title="Verify Login">
             <form enctype="application/x-www-form-urlencoded" method="post">
                 <input type="hidden" name="encryptedCode" value={encryptedCode} />
+                <input type="hidden" name="email" value={email} />
                 <fieldset>
                     <legend>Verification Code</legend>
                     <input name="code" placeholder="Code"/>
