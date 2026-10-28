@@ -25,7 +25,7 @@ export default class extends Page {
 
         let code = this.form.fields["code"];
 
-        if( this.es.general.decrypt(encryptedCode) === code) {
+        if( encryptedCode && this.es.general.decrypt(encryptedCode) === code) {
             // setup login...
 
             const user = await this.db.users
