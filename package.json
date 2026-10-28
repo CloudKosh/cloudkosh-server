@@ -25,7 +25,7 @@
     "@aws-sdk/client-ses": "^3.1156.0",
     "@azure/storage-blob": "^12.34.0",
     "@entity-access/entity-access": "^1.2.52",
-    "@entity-access/server-pages": "^1.1.683",
+    "@entity-access/server-pages": "^1.1.684",
     "@social-mail/web-components": "^1.1.48",
     "@web-atoms/fetch-builder": "^1.0.34",
     "console-log-colors": "^0.5.0",

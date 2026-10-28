@@ -5,20 +5,16 @@ import AppLayout from "../../../../../common/html/AppLayout.js";
 export default class extends Page {
     async run() {
 
-        const doc = <AppLayout title="Login">
-            <form method="post">
+        return this.html(<AppLayout title="Login">
+            <form enctype="application/x-www-form-urlencoded" method="post">
                 <fieldset>
                     <legend>Email Address</legend>
-                    <div>
-                        <input name="email" placeholder="Email Address"/>
-                    </div>
-                    <div>
-                        <button type="submit">Request Code</button>
-                    </div>
-                </fieldset>
+                    <input name="email" placeholder="Email Address"/>
+                    </fieldset>
+                <div>
+                    <button type="submit">Request Code</button>
+                </div>
             </form>
-        </AppLayout>;
-
-        return doc;
+        </AppLayout>);
     }
 }

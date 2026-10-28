@@ -8,13 +8,6 @@ import AppServer from "./AppServer.js";
 
 class AppCluster extends ClusterInstance<AppServer> {
 
-    get maxWorkerCount() {
-        if (globalEnv.isProductionServer) {
-            return super.maxWorkerCount;
-        }
-        return 2;
-    }
-
     runPrimary(arg: AppServer) {
 
         const { port } = globalEnv;
@@ -24,11 +17,9 @@ class AppCluster extends ClusterInstance<AppServer> {
             }
         }
 
-        const { isTestMode, isDevTestMode, isProductionServer } = globalEnv;
+        const { isTestMode, } = globalEnv;
         console.log(JSON.stringify({
             isTestMode,
-            isDevTestMode,
-            isProductionServer
         }));
         return arg.init();
     }

@@ -11,8 +11,6 @@ const packageJson = JSON.parse(readFileSync(packageJsonPath , "utf-8"));
 const { version } = packageJson;
 
 const isTestMode = /true/i.test(process.env.CLOUD_KOSH_TEST_MODE || "false");
-const isDevTestMode = /true/i.test(process.env.CLOUD_KOSH_DEV_TEST_MODE || "false");
-const isProductionServer = /true/i.test(process.env.CLOUD_KOSH_IS_PRODUCTION || "false");
 
 const serverID = process.env.CLOUD_KOSH_SERVER_ID || hostname();
 
@@ -20,11 +18,6 @@ let database = process.env.CLOUD_KOSH_DB_DATABASE ?? "CloudKosh";
 const testDatabase = process.env.CLOUD_KOSH_DB_TEST_MODE;
 if (testDatabase) {
     database = `${database}_${Date.now()}`;
-}
-
-let siteGroup = process.env.CLOUD_KOSH_SITE_GROUP ?? "";
-if (!siteGroup) {
-    siteGroup = null;
 }
 
 let port = (process.env.PORT || "8080") as any;
@@ -40,23 +33,19 @@ export const globalEnv = {
     serverID,
     version,
     isTestMode,
-    isProductionServer,
-    isDevTestMode,
-    disableWorkflows: /yes|true/i.test(process.env.CLOUD_KOSH_DISABLE_WORKFLOWS),
     workflows: {
         enableInDevMode: /true|yes/i.test(process.env.CLOUD_KOSH_ENABLE_WORKFLOWS_IN_DEV_MODE),
     },
-    fcs: {
-        port: process.env.FILE_CONVERSION_SERVER_PORT,
-        host: null,
-    },
     publicKey: process.env.CLOUD_KOSH_PUBLIC_KEY,
-    secretKey: process.env.CLOUD_KOSH_PUBLIC_KEY,
     app: {
-        name: process.env.CLOUD_KOSH_APP_NAME ?? "800casting",
-        isCastyy: /true|yes/i.test(process.env.CLOUD_KOSH_IS_CASTYY ?? "false"),
-        siteGroup,
-        npmVersionKey: process.env.CLOUD_KOSH_GIT_PACKAGES_NAME ?? "GitPackages"
+        name: process.env.CLOUD_KOSH_APP_NAME ?? "Cloud Kosh",
+    },
+    smtp: {
+        host: process.env.CLOUD_KOSH_SMTP_HOST,
+        port: process.env.CLOUD_KOSH_SMTP_PORT,
+        secure: /true|yes/i.test(process.env.CLOUD_KOSH_SMTP_SECURE),
+        username: process.env.CLOUD_KOSH_SMTP_USERNAME,
+        password: process.env.CLOUD_KOSH_SMTP_PASSWORD,
     },
     db: {
         server: process.env.CLOUD_KOSH_DB_SERVER ?? "postgres",
@@ -66,11 +55,6 @@ export const globalEnv = {
         ssl:  JSON.parse(process.env.CLOUD_KOSH_DB_SSL ?? "null"),
         user: process.env.CLOUD_KOSH_DB_USER ?? "postgres",
         password: process.env.CLOUD_KOSH_DB_PASSWORD ?? "abcd123",
-    },
-    socialMail: {
-        host: process.env.CLOUD_KOSH_SOCIAL_MAIL_HOST,
-        key: process.env.CLOUD_KOSH_SOCIAL_MAIL_KEY,
-        accessToken: process.env.CLOUD_KOSH_SOCIAL_MAIL_ACCESS_TOKEN
     },
     tmpDir: join(process.env.CLOUD_KOSH_TMP_PATH || tmpdir(), serverID),
     tmpSize: process.env.CLOUD_KOSH_TMP_SIZE || "2gb",

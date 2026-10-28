@@ -84,15 +84,15 @@ export default abstract class WebServer {
 
     public runWorkflows() {
 
-        if (globalEnv.isDevTestMode) {
-            if(!globalEnv.workflows.enableInDevMode) {
-                return;
-            }
-        }
+        // if (globalEnv.isDevTestMode) {
+        //     if(!globalEnv.workflows.enableInDevMode) {
+        //         return;
+        //     }
+        // }
 
-        if (globalEnv.disableWorkflows) {
-            return;
-        }
+        // if (globalEnv.disableWorkflows) {
+        //     return;
+        // }
 
         globalServices.resolve(AppWorkflowContext).start({
             taskGroups: [ "default", "sync", "sync-queue", "notify", "background", "daily", "batch"]
