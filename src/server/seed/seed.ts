@@ -23,13 +23,14 @@ export default async function seed() {
         name: "main"
     });
 
-    if (!migrated) {
-        return;
-    }
-
     await db.users.withKeys({
         emailAddress: globalEnv.adminEmail,
         roles: "admin",
         status: "active"
     }).selectOrInsert();
+
+    if (!migrated) {
+        return;
+    }
+
 }
