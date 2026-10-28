@@ -66,3 +66,7 @@ export const globalEnv = {
 };
 
 ensureDir(globalEnv.tmpDir);
+
+if(!globalEnv.publicKey) {
+    throw new Error(`Environment CLOUD_KOSH_PUBLIC_KEY not set`);
+}

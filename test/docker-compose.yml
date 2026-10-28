@@ -46,6 +46,7 @@ services:
       - PORT=/sockets/web-server.sock
       - CLOUD_KOSH_DB_HOST=cloudkosh-test-db
       - CLOUD_KOSH_DB_SSL=false
+      - CLOUD_KOSH_PUBLIC_KEY=92349239434797
       - CLOUDKOSH_TEST_MODE=true
     volumes:
       - ck-sockets:/sockets
