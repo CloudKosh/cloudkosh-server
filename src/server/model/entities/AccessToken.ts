@@ -18,8 +18,8 @@ export default class AccessToken {
     })
     userID: number;
 
-    @Column({ dataType: "Char", length: 400 })
-    secretHash: string;
+    @Column({ dataType: "ByteArray", length: 400 })
+    secretHash: Buffer;
 
     @Column({ dataType: "DateTime", nullable: true})
     lastUsed: DateTime;

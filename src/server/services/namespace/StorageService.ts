@@ -69,7 +69,7 @@ export default class StorageService {
         // why this?
         // in case if you accidentally used same storage
         // this would reduce overwriting same content
-        const Key = `${content.contentID}/${content.sha256Base24}`;
+        const Key = content.keyPath;
 
         await client.send(new PutObjectCommand({
             Bucket,
@@ -132,10 +132,7 @@ export default class StorageService {
             }
         });
 
-        // why this?
-        // in case if you accidentally used same storage
-        // this would reduce overwriting same content
-        const Key = `${content.contentID}/${content.sha256Base24}`;
+        const Key = content.keyPath;
 
         const r = await client.send(new GetObjectCommand({
             Bucket,

@@ -25,7 +25,7 @@ export default class AccessTokenEvents extends AuthenticatedEvents<AccessToken> 
     }
 
     beforeInsert(entity: AccessToken, entry: ChangeEntry<AccessToken>) {
-        entity.secretHash = "";
+        entity.secretHash = Buffer.alloc(0);
     }
 
     preJson(entity: AccessToken): AccessToken {

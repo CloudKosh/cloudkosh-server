@@ -20,14 +20,21 @@ export default class NamespaceContent {
     })
     namespaceID: number;
 
-    @Column({ dataType: "Char", length: 200})
-    sha256Base24: string;
+    @Column({ dataType: "ByteArray"})
+    sha256: Buffer;
 
     @Column({ dataType: "BigInt" })
     size: number;
 
     @Column({ dataType: "Boolean", default: () => false})
     stale: boolean;
+
+    /** 
+     * This is important, if we have to change the path,
+     * by including version or any other information.
+     */
+    @Column({ dataType:"Char", length: 1024 })
+    keyPath: string;
 
     fileBlocks: FileBlock[];
 

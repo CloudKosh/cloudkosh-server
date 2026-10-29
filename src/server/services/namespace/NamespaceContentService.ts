@@ -1,4 +1,4 @@
-import Inject, { RegisterScoped } from "@entity-access/entity-access/dist/di/di.js";
+import Inject, { RegisterSingleton, ServiceProvider } from "@entity-access/entity-access/dist/di/di.js";
 import KoshDbContext from "../../model/KoshDbContext.js";
 import { LocalFile } from "@entity-access/server-pages/dist/core/LocalFile.js";
 import HashService from "../hash/HashService.js";
@@ -11,11 +11,8 @@ import ServerLogger from "@entity-access/server-pages/dist/core/ServerLogger.js"
 import { areFilesEqual } from "../../../common/files/FileApi.js";
 import DiskCacheService from "../cache/DiskCacheService.js";
 
-@RegisterScoped
+@RegisterSingleton
 export default class NamespaceContentService {
-
-    @Inject
-    private db: KoshDbContext;
 
     @Inject
     private hashService: HashService;
@@ -30,16 +27,21 @@ export default class NamespaceContentService {
     private diskCache: DiskCacheService;
 
     async download(content: NamespaceContent) {
-        const { namespaceID, contentID, sha256Base24 } = content;
+        const { namespaceID, contentID, sha256 } = content;
 
         const path = `local-content-cache/${contentID}`;
 
         return await this.diskCache.getOrCreateAsync(path, async (lf) =>{
 
+            const sha256Base24 = sha256.toString("base64url");
+
             // we should wait if someone is still saving the file for same content id
             await using _lock = await this.lockService.lock(`save-content-${namespaceID}-${sha256Base24}`);
 
-            const storageContent = await this.db.storageContents
+            using scope = ServiceProvider.createScope(this);
+            const db = scope.resolve(KoshDbContext);
+
+            const storageContent = await db.storageContents
                 .where(content,
                     (x, p) => x.contentID === p.contentID && x.ready === true
                 )
@@ -55,17 +57,22 @@ export default class NamespaceContentService {
 
     async save(namespaceID, file: LocalFile) {
 
-        const sha256Base24 = await this.hashService.hash(file);
+        const sha256 = await this.hashService.hash(file);
 
         // we are assuming that 256mb would be saved in 90 seconds...
         // however even blocks of 64mb can be saved..
+
+        const sha256Base24 = sha256.toString("base64url");
 
         for await(const _r of Range.timeRange(90000,15000)) {
 
             await using _lock = await this.lockService.lock(`save-content-${namespaceID}-${sha256Base24}`);
 
-            let c = await this.db.namespaceContents
-                .withKeys({ namespaceID, sha256Base24 })
+            using scope = ServiceProvider.createScope(this);
+            const db = scope.resolve(KoshDbContext);
+
+            let c = await db.namespaceContents
+                .withKeys({ namespaceID, sha256 })
                 .select();
 
             if(c) {
@@ -75,11 +82,27 @@ export default class NamespaceContentService {
                 // there may be collision or failed upload
             }
 
+            
+            await using tx = await db.connection.createTransaction(); 
+            const keyPath = "";
+
             // insert...
-            c = await this.db.namespaceContents.statements.insert({
+            c = await db.namespaceContents.statements.insert({
                 namespaceID,
-                sha256Base24
+                keyPath,
+                sha256
             });
+
+            const { contentID } = c;
+
+            c.keyPath = `${sha256.toString("base64url")}/${c.contentID}`;
+            await db.namespaceContents.withKeys({
+                contentID,
+            }).update({
+                keyPath
+            });
+
+            await tx.commit();
 
             await this.storageService.save(c, file);
             return c.contentID;

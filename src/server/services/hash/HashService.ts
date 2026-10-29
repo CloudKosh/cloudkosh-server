@@ -10,7 +10,7 @@ export default class HashService {
         for await(const data of file.readBuffers()) {
             hash = hash.update(data);
         }
-        return hash.digest("base64url");
+        return hash.digest();
     }
 
 }
