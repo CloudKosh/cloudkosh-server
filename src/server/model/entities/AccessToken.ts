@@ -18,7 +18,7 @@ export default class AccessToken {
     })
     userID: number;
 
-    @Column({ dataType: "ByteArray", length: 400 })
+    @Column({ dataType: "ByteArray" })
     secretHash: Buffer;
 
     @Column({ dataType: "DateTime", nullable: true})
