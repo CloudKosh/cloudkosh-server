@@ -5,6 +5,7 @@ import { Query } from "@entity-access/server-pages/dist/core/Query.js";
 import Inject from "@entity-access/entity-access/dist/di/di.js";
 import KoshDbContext from "../../../../../server/model/KoshDbContext.js";
 import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
+import FormPost from "../../../../../common/html/FormPost.js";
 
 export default class extends Page {
 
@@ -38,6 +39,22 @@ export default class extends Page {
         const results = await q.limit(size).toPage(start, size);
 
         return this.html(<AppLayout title="Namespaces">
+
+            <details>
+                <summary>Add New</summary>
+                <FormPost>
+                    <fieldset>
+                        <legend>Name</legend>
+                        <input name="name"/>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Description</legend>
+                        <input name="description"/>
+                    </fieldset>
+                    <button type="submit">Save</button>
+                </FormPost>
+            </details>
+
             <table>
                 <tr>
                     <th>ID</th>
@@ -51,6 +68,12 @@ export default class extends Page {
                     <th>{x.dateCreated}</th>
                 </tr>)}
             </table>
+
+            <footer>
+                {start && <a href={`?${this.start}&${this.size}`}>Start</a>}
+                {results.more && <a href={`?${this.start+this.size}&${this.size}`}>Next</a>}
+            </footer>
+
         </AppLayout>)
     }
 }

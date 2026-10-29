@@ -8,6 +8,7 @@ import XNode from "@entity-access/server-pages/dist/html/XNode.js";
 import EncryptionService from "../../../../../server/services/encryption/EncryptionService.js";
 import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 import HtmlDocument from "@entity-access/server-pages/dist/html/HtmlDocument.js";
+import FormPost from "../../../../../common/html/FormPost.js";
 
 @Prepare.parseForm
 @Prepare.authorize
@@ -95,7 +96,7 @@ export default class extends Page {
         }
 
         return this.html(<AppLayout title="Verify Login">
-            <form enctype="application/x-www-form-urlencoded" method="post">
+            <FormPost>
                 <input type="hidden" name="encryptedCode" value={encryptedCode} />
                 <input type="hidden" name="email" value={email} />
                 <fieldset>
@@ -105,7 +106,7 @@ export default class extends Page {
                 <div>
                     <button type="submit">Verify</button>
                 </div>
-            </form>
+            </FormPost>
         </AppLayout>);
     }
 
