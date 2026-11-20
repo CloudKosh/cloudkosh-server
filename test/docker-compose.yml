@@ -18,6 +18,8 @@ services:
       - ACME_MODE=self-signed
       - FORWARD_SMTP_DISABLE_SPF=yes
       - V1=1
+    cap_add:
+      - NET_ADMIN
     volumes:
       - ck-sockets:/sockets
       - ck-cache:/cache

@@ -9,6 +9,7 @@ ENV CLOUD_KOSH_DB_USER=postgres
 ENV CLOUD_KOSH_DB_PASSWORD=kosh123
 ENV CLOUD_KOSH_ADMIN_EMAIL=admin@admin
 ENV APP_HOST=v2025-test.800casting.com
+ENV NODE_APP=/app/index.js
 
 VOLUME /data
 VOLUME /cache
