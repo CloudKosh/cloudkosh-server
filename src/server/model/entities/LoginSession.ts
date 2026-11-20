@@ -6,7 +6,7 @@ import User from "./User.js";
 import { IgnoreJsonProperty, JsonProperty } from "@entity-access/server-pages/dist/services/ModelService.js";
 import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 
-const loginSessionStatuses = ["created", "change-password", "totp"] as const;
+const loginSessionStatuses = ["created", "change-password", "totp", "verification-pending", "disabled"] as const;
 export type loginStatusType = typeof loginSessionStatuses[number];
 
 const devicePushTypes = ["WebPush", "fcm", "apn"] as const;
@@ -48,7 +48,7 @@ export default class LoginSession {
     @Column({ })
     public dateUpdated: DateTime;
 
-    @Column({ dataType: "AsciiChar", length: 20, nullable: true})
+    @Column({ dataType: "AsciiChar", length: 40, default: () => "verification-pending"})
     public status: loginStatusType;
 
     @Column({ dataType: "Char", length: 50, nullable: true })

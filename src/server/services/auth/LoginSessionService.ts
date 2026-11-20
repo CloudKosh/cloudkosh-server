@@ -10,20 +10,23 @@ export default class LoginSessionService {
 
     @Inject sessionUser: SessionUser;
 
-    async create({ userID, ipAddress }) {
+    async create({ userID, ipAddress, sessionID = void 0 }) {
 
         const expiry = DateTime.now.addDays(1).asJSDate;
         const dateUpdated = DateTime.now;
 
-        const { sessionID } = await this.db.loginSessions.statements.insert({
-            expiry: DateTime.from(expiry),
-            userID,
-            status: "created",
-            start: dateUpdated,
-            invalid: false,
-            dateUpdated,
-            ipAddress,
-        })
+        if(!sessionID) {
+            const s = await this.db.loginSessions.statements.insert({
+                expiry: DateTime.from(expiry),
+                userID,
+                status: "created",
+                start: dateUpdated,
+                invalid: false,
+                dateUpdated,
+                ipAddress,
+            });
+            
+        }
 
         const cookie = await this.sessionUser.setAuthCookie({
             expiry: DateTime.now.addDays(1).asJSDate,
