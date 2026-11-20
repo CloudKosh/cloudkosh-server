@@ -18,7 +18,7 @@
         "jsxFactory": "XNode.create",
         "types": ["node"],
         "lib": [
-            "ES2018",
+            "ES2025",
             "ES2021.WeakRef",
             "esnext.disposable",
             "ES2021.String",

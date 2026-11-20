@@ -25,7 +25,7 @@ export default class LoginSessionService {
                 dateUpdated,
                 ipAddress,
             });
-            
+            sessionID = s.sessionID;
         }
 
         const cookie = await this.sessionUser.setAuthCookie({
