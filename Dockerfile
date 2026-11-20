@@ -1,17 +1,13 @@
-FROM node:26-alpine
+FROM ghcr.io/social-mail/postgres-with-backups:latest
 RUN apk add --no-cache tini
 
-ENV CASTING_SERVER_TMP_SIZE=32gb
 ENV CLOUD_KOSH_DB_DATABASE=cloudkosh
-ENV CLOUD_KOSH_DB_HOST=postgres
+ENV CLOUD_KOSH_DB_HOST=/var/run/postgresql
 ENV CLOUD_KOSH_DB_PORT=5432
 ENV CLOUD_KOSH_DB_USER=postgres
 ENV CLOUD_KOSH_DB_PASSWORD=abcd123
 ENV CLOUD_KOSH_ADMIN_EMAIL=admin@admin
 ENV APP_HOST=v2025-test.800casting.com
-
-ENV FILE_CONVERSION_SERVER_PORT=/fcs/sockets/fcs.sock
-ENV LOCAL_CACHE_PORT=/fcs/local-cache.sock
 
 VOLUME /data
 VOLUME /cache
