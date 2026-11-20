@@ -30,14 +30,13 @@ services:
     build:
       context: ../
       dockerfile: Dockerfile
-    entrypoint: /sbin/tini
-    command: -- npm run dev
     environment:
       - PORT=/sockets/web-server.sock
       - CLOUD_KOSH_DB_SSL=false
       - CLOUD_KOSH_PUBLIC_KEY=92349239434797
       - CLOUDKOSH_TEST_MODE=true
       - NODE_TEST=yes
+      - PG_TEST=test
     volumes:
       - ck-sockets:/sockets
       - ck-cache:/cache

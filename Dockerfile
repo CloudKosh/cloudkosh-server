@@ -1,11 +1,12 @@
 FROM ghcr.io/social-mail/postgres-with-backups:latest
-RUN apk add --no-cache tini
+
+ENV POSTGRES_PASSWORD=kosh123
 
 ENV CLOUD_KOSH_DB_DATABASE=cloudkosh
 ENV CLOUD_KOSH_DB_HOST=/var/run/postgresql
 ENV CLOUD_KOSH_DB_PORT=5432
 ENV CLOUD_KOSH_DB_USER=postgres
-ENV CLOUD_KOSH_DB_PASSWORD=abcd123
+ENV CLOUD_KOSH_DB_PASSWORD=kosh123
 ENV CLOUD_KOSH_ADMIN_EMAIL=admin@admin
 ENV APP_HOST=v2025-test.800casting.com
 
@@ -16,9 +17,6 @@ WORKDIR /app
 
 ENV HOST=0.0.0.0
 ENV SELF_HOST=true
-
-EXPOSE 80 443 9229
-ENTRYPOINT ["/sbin/tini", "--", "npm", "start"]
 
 COPY package*.json ./
 
