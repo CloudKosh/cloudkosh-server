@@ -30,7 +30,7 @@ export default class extends Page {
 
         if(model.sessionID) {
             if(model.code) {
-                const sessions = await this.db.loginSessions.where(model, (x, p) => x.userName === p.emailAddress
+                const sessions = await this.db.loginSessions.where(model, (x, p) => x.user.emailAddress === p.emailAddress
                     && x.status === "verification-pending"
                     && x.verificationToken === p.code)
                     .updateSelect((x) => ({
