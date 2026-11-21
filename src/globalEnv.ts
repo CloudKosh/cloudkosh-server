@@ -43,9 +43,10 @@ export const globalEnv = {
     },
     smtp: {
         host: process.env.CLOUD_KOSH_SMTP_HOST,
-        port: process.env.CLOUD_KOSH_SMTP_PORT,
+        port: Number(process.env.CLOUD_KOSH_SMTP_PORT || 25),
         secure: /true|yes/i.test(process.env.CLOUD_KOSH_SMTP_SECURE),
         username: process.env.CLOUD_KOSH_SMTP_USERNAME,
+        from: process.env.CLOUD_KOSH_SMTP_FROM || process.env.CLOUD_KOSH_SMTP_USERNAME, 
         password: process.env.CLOUD_KOSH_SMTP_PASSWORD,
     },
     db: {

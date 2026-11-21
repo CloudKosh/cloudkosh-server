@@ -4,6 +4,8 @@ import KoshDbContext from "../../model/KoshDbContext.js";
 import { SessionUser } from "@entity-access/server-pages/dist/core/SessionUser.js";
 import LoginSession from "../../model/entities/LoginSession.js";
 import EntityAccessError from "@entity-access/entity-access/dist/common/EntityAccessError.js";
+import EmailService from "../email/EmailService.js";
+import XNode from "@entity-access/server-pages/dist/html/XNode.js";
 
 @RegisterScoped
 export default class LoginSessionService {
@@ -11,6 +13,8 @@ export default class LoginSessionService {
     @Inject db: KoshDbContext;
 
     @Inject sessionUser: SessionUser;
+
+    @Inject emailService: EmailService;
 
     async create({ userID, ipAddress, sessionID = void 0 }) {
 
@@ -69,7 +73,26 @@ export default class LoginSessionService {
         return s.sessionID;
     }
 
-    sendEmail(v: LoginSession) {
-        throw new Error("Method not implemented.");
+    async sendEmail(v: LoginSession) {
+
+        const { userID } = v;
+
+        const user = await this.db.users.withKeys({ userID }).select();
+
+        await this.emailService.send({
+            to: [user.emailAddress],
+            subject: "Login verification code",
+            body: <div>
+                <p>
+                    Verification code for login is<br/>
+                    <pre style="font-size:25px">{v.verificationToken}</pre>
+                </p>
+                <hr style="height: 1px"/>
+                <p>
+                    If you did not request login code, please do not provide this code
+                    to anyone as they may get access to your sensitive information.
+                </p>
+            </div>
+        });
     }
 }
