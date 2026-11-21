@@ -7,6 +7,7 @@ import EntityAccessError from "@entity-access/entity-access/dist/common/EntityAc
 import EmailService from "../email/EmailService.js";
 import XNode from "@entity-access/server-pages/dist/html/XNode.js";
 import { globalEnv } from "../../../globalEnv.js";
+import { randomInt } from "node:crypto";
 
 @RegisterScoped
 export default class LoginSessionService {
@@ -68,6 +69,7 @@ export default class LoginSessionService {
             status: "created",
             start: dateUpdated,
             invalid: false,
+            verificationToken: randomInt(111111,999999),
             dateUpdated,
             ipAddress,
         });
