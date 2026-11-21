@@ -66,7 +66,7 @@ export default class LoginSessionService {
         const s = await this.db.loginSessions.statements.insert({
             expiry: DateTime.from(expiry),
             userID,
-            status: "created",
+            status: "verification-pending",
             start: dateUpdated,
             invalid: false,
             verificationToken: randomInt(111111,999999),
