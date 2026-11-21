@@ -6,6 +6,7 @@ import LoginSession from "../../model/entities/LoginSession.js";
 import EntityAccessError from "@entity-access/entity-access/dist/common/EntityAccessError.js";
 import EmailService from "../email/EmailService.js";
 import XNode from "@entity-access/server-pages/dist/html/XNode.js";
+import { globalEnv } from "../../../globalEnv.js";
 
 @RegisterScoped
 export default class LoginSessionService {
@@ -78,6 +79,10 @@ export default class LoginSessionService {
         const { userID } = v;
 
         const user = await this.db.users.withKeys({ userID }).select();
+
+        if(!globalEnv.smtp.host) {
+            console.log(`Login code for ${user.emailAddress} is ${v.verificationToken}`);
+        }
 
         await this.emailService.send({
             to: [user.emailAddress],
