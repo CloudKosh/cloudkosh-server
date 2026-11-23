@@ -62,9 +62,9 @@ export default class ImportActionWorkflow extends Workflow<number> {
 
         const c = sc.create(task);
 
-        for await(const { paths, next } of c.list(nextToken)) {
+        for await(const { objects, next } of c.list(nextToken)) {
             // save all files...
-            for(const path of paths) {
+            for(const { path } of objects ) {
                 const file = tf.createTempFile(basename(path));
                 let filePath = path;
                 if(namespace) {
