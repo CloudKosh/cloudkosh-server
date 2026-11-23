@@ -7,6 +7,9 @@ import StorageClientService from "../../services/storage-client/StorageClientSer
 import BucketFileService from "../../services/files/BucketFileService.js";
 import DiskCacheService from "../../services/cache/DiskCacheService.js";
 import { basename } from "node:path";
+import { LocalFile } from "@entity-access/server-pages/dist/core/LocalFile.js";
+import { createWriteStream } from "node:fs";
+import EntityAccessError from "@entity-access/entity-access/dist/common/EntityAccessError.js";
 
 export default class ImportActionWorkflow extends Workflow<number> {
 
@@ -55,18 +58,30 @@ export default class ImportActionWorkflow extends Workflow<number> {
             .include((x) => [x.bucket, x.namespace])
             .first();
 
-        let { nextToken, bucket, namespace } = task;
+        let { nextToken, bucket, namespace, namespaceID } = task;
 
         const c = sc.create(task);
 
         for await(const { paths, next } of c.list(nextToken)) {
             // save all files...
             for(const path of paths) {
-                if(bucket) {
-                    const file = tf.createTempFile(basename(path));
-                    await c.download(path, file);
-                    await bfs.saveFile({ bucket, files: file.split() })
+                const file = tf.createTempFile(basename(path));
+                let filePath = path;
+                let nsBucket = bucket;
+                if(!bucket) {
+                    if(namespace) {
+                        // pending...
+                        const [bucketName, ... all] = path.split("/");
+                        filePath = all.join("/");
+                        // auto create bucket...
+                        nsBucket = await db.buckets.withKeys({ name: bucketName, namespaceID }).selectOrInsert();
+                    } else {
+                        throw new EntityAccessError("namespace must or bucket must be specified");
+                    }
                 }
+                await c.download(path, file);
+                const files = await this.split(tf, file);
+                await bfs.saveFile({ bucket, files, path: filePath });
             }
             nextToken = next;
         }
@@ -93,6 +108,29 @@ export default class ImportActionWorkflow extends Workflow<number> {
                 await ImportActionWorkflow.queue(this.context, taskID);
             }
         }
+    }
+
+    async split(tf: DiskCacheService, file: LocalFile) {
+        const files = [];
+        const total = file.contentSize;
+        let start = 0;
+        const max = 256*1024*1024;
+
+        if(total < max) {
+            return [file];
+        }
+
+        const tasks = [];
+
+        while(start < total) {
+            const size = start + max > total ? total - start : max;
+            const t = tf.createTempFile(file.fileName + "." + Date.now().toString(36));
+            tasks.push(file.writeTo(createWriteStream(t.path), { start, end: start + size }));
+        }
+
+        await Promise.all(tasks);
+
+        return files;    
     }
 
 }
