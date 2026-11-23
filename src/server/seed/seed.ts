@@ -25,7 +25,7 @@ export default async function seed() {
 
     await db.users.withKeys({
         emailAddress: globalEnv.adminEmail,
-        roles: "admin",
+        roles: "Administrator",
         status: "active"
     }).selectOrInsert();
 
