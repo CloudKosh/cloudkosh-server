@@ -1,0 +1,34 @@
+import CheckConstraint from "@entity-access/entity-access/dist/decorators/CheckConstraint.js";
+import Column from "@entity-access/entity-access/dist/decorators/Column.js";
+import Table from "@entity-access/entity-access/dist/decorators/Table.js";
+
+const sourceTypes = [ "s3", "azure-blob" ] as const;
+export type sourceTypesType = typeof sourceTypes[number];
+
+
+@Table("ImportTasks")
+@CheckConstraint({
+    name: "CC_Import_Tasks_Bucket_Or_Namespace",
+    filter: (x) => (x.bucketID === null && x.namespaceID !== null)
+        || (x.bucketID !== null && x.namespaceID === null)
+})
+export default class ImportTask {
+
+    @Column({ dataType: "BigInt"})
+    taskID: number;
+
+    @Column({ dataType: "BigInt", nullable: true})
+    bucketID: number;
+
+    @Column({ dataType: "BigInt", nullable: true})
+    namespaceID: number;
+
+    @Column({ dataType: "Char", length: 20, enum: sourceTypes})
+    sourceType: sourceTypesType;
+
+    @Column({ dataType: "Char", nullable: true})
+    encryptedConnectionString: string;
+
+    @Column({ dataType: "Char", nullable: true})
+    encryptedBucket: string;
+}

@@ -39,7 +39,7 @@ export default class NamespaceStorage {
     @Column({ dataType: "Int", default: () => 0 })
     writePriority: number;
 
-    @Column({ dataType: "Char", length: 100 })
+    @Column({ dataType: "Char", length: 100, enum: storageTypes })
     type: storageType;
 
     @Column({ dataType: "Char", length: 200 })
