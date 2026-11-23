@@ -47,7 +47,11 @@ export default class Bucket {
     @Column({ dataType: "BigInt"})
     @RelateTo(Namespace, {
         property: (x) => x.namespace,
-        inverseProperty: (x) => x.buckets
+        inverseProperty: (x) => x.buckets,
+        foreignKeyConstraint: {
+            name: "FC_Buckets_NamespaceID",
+            onDelete: "restrict"
+        }
     })
     namespaceID: number;
 

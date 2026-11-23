@@ -10,14 +10,22 @@ export default class StorageContent {
     @Column({ dataType: "BigInt", key: true})
     @RelateTo(NamespaceContent, {
         property: (x) => x.content,
-        inverseProperty: (x) => x.storageContents
+        inverseProperty: (x) => x.storageContents,
+        foreignKeyConstraint: {
+            name: "FC_StorageContent_ContentID",
+            onDelete: "cascade"
+        }
     })
     contentID: number;
     
     @Column({ dataType: "BigInt", key: true})
     @RelateTo(NamespaceStorage, {
         property: (x) => x.storage,
-        inverseProperty: (x) => x.storageContents
+        inverseProperty: (x) => x.storageContents,
+        foreignKeyConstraint: {
+            name: "FC_StorageContent_StorageID",
+            onDelete: "restrict"
+        }
     })
     storageID: number;
 

@@ -16,7 +16,11 @@ export default class NamespaceContent {
     @Column({ dataType: "BigInt"})
     @RelateTo(Namespace, {
         property: (x) => x.namespace,
-        inverseProperty: (x) => x.contents
+        inverseProperty: (x) => x.contents,
+        foreignKeyConstraint: {
+            name: "FC_NamespaceContents_NamespaceID",
+            onDelete: "restrict"
+        }
     })
     namespaceID: number;
 

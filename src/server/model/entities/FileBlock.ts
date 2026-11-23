@@ -10,14 +10,22 @@ export default class FileBlock {
     @Column({ dataType: "BigInt", key: true })
     @RelateTo(BucketFile, {
         property: (x) => x.file,
-        inverseProperty: (x) => x.blocks
+        inverseProperty: (x) => x.blocks,
+        foreignKeyConstraint: {
+            name: "FC_FileBlocks_FileID",
+            onDelete: "cascade"
+        }
     })
     fileID: number;
 
     @Column({ dataType: "BigInt", key: true })
     @RelateTo(NamespaceContent, {
         property: (x) => x.content,
-        inverseProperty: (x) => x.fileBlocks
+        inverseProperty: (x) => x.fileBlocks,
+        foreignKeyConstraint: {
+            name: "FC_FileBlocks_FileID",
+            onDelete: "restrict"
+        }
     })
     contentID: number;
 

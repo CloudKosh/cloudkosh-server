@@ -3,8 +3,11 @@ import Column from "@entity-access/entity-access/dist/decorators/Column.js";
 import Table from "@entity-access/entity-access/dist/decorators/Table.js";
 import { JsonProperty } from "@entity-access/server-pages/dist/services/ModelService.js";
 
-const sourceTypes = [ "s3", "azure-blob" ] as const;
+const sourceTypes = [ "s3", "azure-blob", "cloud-kosh-ns", "cloud-kosh-bucket" ] as const;
 export type sourceTypesType = typeof sourceTypes[number];
+
+const statusTypes = [ "started", "failed", "completed" ] as const;
+export type statusType = typeof statusTypes[number];
 
 
 @Table("ImportTasks")
@@ -23,6 +26,12 @@ export default class ImportTask {
 
     @Column({ dataType: "BigInt", nullable: true})
     namespaceID: number;
+
+    @Column({ dataType: "Char", enum: statusTypes, default: () => "started"})
+    status: statusType;
+
+    @Column({ dataType: "Char", nullable: true})
+    nextToken: string;
 
     @Column({ dataType: "Char", length: 20, enum: sourceTypes})
     sourceType: sourceTypesType;

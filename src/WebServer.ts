@@ -44,8 +44,10 @@ export default abstract class WebServer {
 
         this.register?.();
 
-        // register services...
-        await seed();
+        if(seedDb) {
+            // register services...
+            await seed();
+        }
     }
 
     async start() {

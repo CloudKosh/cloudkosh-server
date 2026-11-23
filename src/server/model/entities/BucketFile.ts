@@ -25,7 +25,11 @@ export default class BucketFile {
     @Column( {dataType: "BigInt"})
     @RelateTo(Bucket, {
         property: (x) => x.bucket,
-        inverseProperty: (x) => x.bucketFiles
+        inverseProperty: (x) => x.bucketFiles,
+        foreignKeyConstraint: {
+            name: "FC_BucketFiles_BucketID",
+            onDelete: "restrict"
+        }
     })
     bucketID: number;
 

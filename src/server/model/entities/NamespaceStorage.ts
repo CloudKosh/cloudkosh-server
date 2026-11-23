@@ -27,7 +27,11 @@ export default class NamespaceStorage {
     @Column({ dataType: "BigInt" })
     @RelateTo(Namespace, {
         property: (x) => x.namespace,
-        inverseProperty: (x) => x.storages
+        inverseProperty: (x) => x.storages,
+        foreignKeyConstraint: {
+            name: "FC_NamesoaceStorages_NamespaceID",
+            onDelete: "restrict"
+        }
     })
     namespaceID: number;
 

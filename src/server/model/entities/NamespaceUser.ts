@@ -10,14 +10,22 @@ export default class NamespaceUser {
     @Column({ dataType: "BigInt", key: true})
     @RelateTo(Namespace, {
         property: (x) => x.namespace,
-        inverseProperty: (x) => x.namespaceUsers
+        inverseProperty: (x) => x.namespaceUsers,
+        foreignKeyConstraint: {
+            name: "FC_NamespaceUsers_NamespaceID",
+            onDelete: "cascade"
+        }
     })
     namespaceID: number;
 
     @Column({ dataType: "BigInt", key: true})
     @RelateTo(User, {
         property: (x) => x.user,
-        inverseProperty: (x) => x.namespaceUsers
+        inverseProperty: (x) => x.namespaceUsers,
+        foreignKeyConstraint: {
+            name: "FC_NamespaceUsers_UserID",
+            onDelete: "cascade"
+        }
     })
     userID: number;
 

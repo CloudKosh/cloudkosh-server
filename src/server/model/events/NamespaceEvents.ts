@@ -3,8 +3,12 @@ import Namespace from "../entities/Namespace.js";
 import AuthenticatedEvents from "./AuthenticatedEvents.js";
 import ChangeEntry from "@entity-access/entity-access/dist/model/changes/ChangeEntry.js";
 import EntityAccessError from "@entity-access/entity-access/dist/common/EntityAccessError.js";
+import Inject from "@entity-access/entity-access/dist/di/di.js";
+import KoshDbContext from "../KoshDbContext.js";
 
 export default class NamespaceEvents extends AuthenticatedEvents<Namespace> {
+
+    @Inject db: KoshDbContext;
 
     filter(query: IEntityQuery<Namespace>) {
         if(!this.verify) {
