@@ -8,6 +8,7 @@ import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
 import type NamespaceContent from "./NamespaceContent.js";
 import type NamespaceUser from "./NamespaceUser.js";
 import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
+import type AccessToken from "./AccessToken.js";
 
 /**
  * Id is a key because change of namespace display name
@@ -44,5 +45,6 @@ export default class Namespace {
     storages: NamespaceStorage[];
     contents: NamespaceContent[];
     namespaceUsers: NamespaceUser[];
+    accessTokens: AccessToken[];
 
 }

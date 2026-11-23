@@ -7,6 +7,7 @@ import Namespace from "./Namespace.js";
 import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
 import type BucketFile from "./BucketFile.js";
 import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
+import type AccessToken from "./AccessToken.js";
 
 @Table("Buckets")
 @Index({
@@ -68,5 +69,6 @@ export default class Bucket {
 
     namespace: Namespace;
     bucketFiles: BucketFile[];
+    accessTokens: AccessToken[];
 
 }

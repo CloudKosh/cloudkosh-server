@@ -5,6 +5,8 @@ import { JsonProperty } from "@entity-access/server-pages/dist/services/ModelSer
 import User from "./User.js";
 import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
+import Namespace from "./Namespace.js";
+import Bucket from "./Bucket.js";
 
 @Table("AccessTokens")
 export default class AccessToken {
@@ -18,6 +20,20 @@ export default class AccessToken {
         inverseProperty: (x) => x.accessTokens
     })
     userID: number;
+
+    @Column({ dataType: "BigInt", nullable: true})
+    @RelateTo(Namespace, {
+        property: (x) => x.namespace,
+        inverseProperty: (x) => x.accessTokens
+    })
+    namespaceID: number;
+
+    @Column({ dataType: "BigInt", nullable: true})
+    @RelateTo(Bucket, {
+        property: (x) => x.bucket,
+        inverseProperty: (x) => x.accessTokens
+    })
+    bucketID: number;
 
     @Column({ dataType: "ByteArray" })
     secretHash: Buffer;
@@ -44,4 +60,8 @@ export default class AccessToken {
     public displaySecret;
 
     user: User;
+
+    namespace: Namespace;
+
+    bucket: Bucket;
 }
