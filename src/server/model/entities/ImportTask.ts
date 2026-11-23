@@ -1,7 +1,10 @@
 import CheckConstraint from "@entity-access/entity-access/dist/decorators/CheckConstraint.js";
 import Column from "@entity-access/entity-access/dist/decorators/Column.js";
+import { RelateTo } from "@entity-access/entity-access/dist/decorators/Relate.js";
 import Table from "@entity-access/entity-access/dist/decorators/Table.js";
 import { JsonProperty } from "@entity-access/server-pages/dist/services/ModelService.js";
+import Namespace from "./Namespace.js";
+import Bucket from "./Bucket.js";
 
 const sourceTypes = [ "s3", "azure-blob", "cloud-kosh-ns", "cloud-kosh-bucket" ] as const;
 export type sourceTypesType = typeof sourceTypes[number];
@@ -22,9 +25,21 @@ export default class ImportTask {
     taskID: number;
 
     @Column({ dataType: "BigInt", nullable: true})
+    @RelateTo(Bucket, {
+        property: (x) => x.bucket,
+        inverseProperty: (x) => x.importTasks
+    })
     bucketID: number;
 
     @Column({ dataType: "BigInt", nullable: true})
+    @RelateTo(Namespace, {
+        property: (x) => x.namespace,
+        inverseProperty: (x) => x.importTasks,
+        foreignKeyConstraint: {
+            name: "FC_ImportTasks_Namespace",
+            onDelete:  "restrict"
+        }
+    })
     namespaceID: number;
 
     @Column({ dataType: "Char", enum: statusTypes, default: () => "started"})
@@ -56,5 +71,8 @@ export default class ImportTask {
 
     @JsonProperty({})
     secretAccessKey: string;
+
+    namespace: Namespace;
+    bucket: Bucket;
 
 }

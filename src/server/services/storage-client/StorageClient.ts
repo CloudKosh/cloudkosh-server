@@ -6,4 +6,6 @@ export default abstract class StorageClient {
 
     abstract download(path: string, file: LocalFile): Promise<void>;
 
+    abstract list(nextToken: string): AsyncGenerator<{ paths: string[], next: any }>
+    
 }

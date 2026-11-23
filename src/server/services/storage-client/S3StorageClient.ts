@@ -26,4 +26,8 @@ export default class S3StorageClient extends StorageClient {
         await file.writeAll(r.Body as Readable);
     }
 
+    async *list(next) {
+        
+    }
+
 }

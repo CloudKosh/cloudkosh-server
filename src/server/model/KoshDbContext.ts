@@ -13,6 +13,7 @@ import DbLock from "./entities/DbLock.js";
 import StorageContent from "./entities/StorageContent.js";
 import LoginSession from "./entities/LoginSession.js";
 import NamespaceUser from "./entities/NamespaceUser.js";
+import ImportTask from "./entities/ImportTask.js";
 
 export default class KoshDbContext extends AppDbContext {
 
@@ -31,6 +32,8 @@ export default class KoshDbContext extends AppDbContext {
     public fileVersionBlocks = this.model.register(FileVersionBlock);
 
     public loginSessions = this.model.register(LoginSession);
+
+    public importTasks = this.model.register(ImportTask);
 
     public namespaces = this.model.register(Namespace);
 
