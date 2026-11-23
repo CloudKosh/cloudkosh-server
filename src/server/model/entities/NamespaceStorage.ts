@@ -5,7 +5,7 @@ import Namespace from "./Namespace.js";
 import Index from "@entity-access/entity-access/dist/decorators/Index.js";
 import type StorageContent from "./StorageContent.js";
 
-const storageTypes = [ "s3", "disk" ];
+const storageTypes = [ "s3", "disk" ] as const;
 export type storageType = typeof storageTypes[number];
 
 

@@ -71,6 +71,11 @@ export default class NamespaceContentService {
             using scope = ServiceProvider.createScope(this);
             const db = scope.resolve(KoshDbContext);
 
+            const ns = await db.namespaces.withKeys({ id: namespaceID }).select();
+            if(!ns.isReady) {
+                throw new EntityAccessError(`Atleast one remote storage must be added to the namespace.`);
+            }
+
             let c = await db.namespaceContents
                 .withKeys({ namespaceID, sha256 })
                 .select();

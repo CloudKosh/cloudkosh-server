@@ -1,8 +1,14 @@
 import { IEntityQuery } from "@entity-access/entity-access/dist/model/IFilterWithParameter.js";
 import NamespaceStorage from "../entities/NamespaceStorage.js";
 import AuthenticatedEvents from "./AuthenticatedEvents.js";
+import ChangeEntry from "@entity-access/entity-access/dist/model/changes/ChangeEntry.js";
+import Inject from "@entity-access/entity-access/dist/di/di.js";
+import KoshDbContext from "../KoshDbContext.js";
 
 export default class NamespaceStorageEvents extends AuthenticatedEvents<NamespaceStorage> {
+
+    @Inject
+    private db: KoshDbContext;
 
     filter(query: IEntityQuery<NamespaceStorage>) {
         if(!this.verify) {
@@ -22,5 +28,11 @@ export default class NamespaceStorageEvents extends AuthenticatedEvents<Namespac
 
     includeFilter(query: IEntityQuery<NamespaceStorage>, type?: any, key?: string) {
         return query;
+    }
+
+    afterInsert(entity: NamespaceStorage, entry: ChangeEntry<NamespaceStorage>) {
+        // set ready only if one remote storage is added...
+        this.db.namespaces.where(entity, (x, p) => x.id === p.namespaceID && x.storages.some((s) => s.type === "s3"))
+            .update((x) => ({ isReady: true }));
     }
 }

@@ -30,7 +30,9 @@ export default class StorageService {
 
         const storage = await db.namespaceStorages
             .where(content,
-                (x, p) => x.namespaceID === p.namespaceID )
+                (x, p) => x.namespaceID === p.namespaceID
+                && x.namespace.isReady === true
+            )
             .orderByDescending((x) => x.writePriority)
             .first();
 

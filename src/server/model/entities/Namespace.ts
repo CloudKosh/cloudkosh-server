@@ -38,6 +38,9 @@ export default class Namespace {
     @Column({ dataType: "DateTime", default: () => Sql.date.now()})
     dateCreated: DateTime;
 
+    @Column({ dataType: "Boolean", default: () => false })
+    isReady: boolean;
+
     @Column({ dataType: "BigInt", default: () => 0})
     size: number;
 
