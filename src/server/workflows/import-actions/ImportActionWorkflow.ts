@@ -67,17 +67,14 @@ export default class ImportActionWorkflow extends Workflow<number> {
             for(const path of paths) {
                 const file = tf.createTempFile(basename(path));
                 let filePath = path;
-                let nsBucket = bucket;
-                if(!bucket) {
-                    if(namespace) {
-                        // pending...
-                        const [bucketName, ... all] = path.split("/");
-                        filePath = all.join("/");
-                        // auto create bucket...
-                        nsBucket = await db.buckets.withKeys({ name: bucketName, namespaceID }).selectOrInsert();
-                    } else {
-                        throw new EntityAccessError("namespace must or bucket must be specified");
-                    }
+                if(namespace) {
+                    // pending...
+                    const [bucketName, ... all] = path.split("/");
+                    filePath = all.join("/");
+                    // auto create bucket...
+                    bucket = await db.buckets.withKeys({ name: bucketName, namespaceID }).selectOrInsert();
+                } else if(!bucket) {
+                    throw new EntityAccessError("namespace must or bucket must be specified");
                 }
                 await c.download(path, file);
                 const files = await this.split(tf, file);
