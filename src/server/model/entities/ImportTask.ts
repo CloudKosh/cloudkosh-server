@@ -21,7 +21,7 @@ export type statusType = typeof statusTypes[number];
 })
 export default class ImportTask {
 
-    @Column({ dataType: "BigInt"})
+    @Column({ dataType: "BigInt", key: true, generated: "identity"})
     taskID: number;
 
     @Column({ dataType: "BigInt", nullable: true})
