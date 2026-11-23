@@ -39,7 +39,10 @@ export default class ImportActionWorkflow extends Workflow<number> {
 
         // iterate 1000 times...
         for(let i=0;i<1000;i++) {
-            await this.importTask(i);
+            const total = await this.importTask(i);
+            if(!total) {
+                break;
+            }
         }
 
     }
@@ -58,30 +61,58 @@ export default class ImportActionWorkflow extends Workflow<number> {
             .include((x) => [x.bucket, x.namespace])
             .first();
 
-        let { nextToken, bucket, namespace, namespaceID } = task;
+        const { taskID } = task;
 
-        const c = sc.create(task);
+        let total = 0;
 
-        for await(const { objects, next } of c.list(nextToken)) {
-            // save all files...
-            for(const { path } of objects ) {
-                const file = tf.createTempFile(basename(path));
-                let filePath = path;
-                if(namespace) {
-                    // pending...
-                    const [bucketName, ... all] = path.split("/");
-                    filePath = all.join("/");
-                    // auto create bucket...
-                    bucket = await db.buckets.withKeys({ name: bucketName, namespaceID }).selectOrInsert();
-                } else if(!bucket) {
-                    throw new EntityAccessError("namespace must or bucket must be specified");
+        try {
+
+            let { nextToken, bucket, namespace, namespaceID } = task;
+
+            const c = sc.create(task);
+
+            for await(const { objects, next } of c.list(nextToken)) {
+                // save all files...
+                for(const { path } of objects ) {
+                    total++;
+                    const file = tf.createTempFile(basename(path));
+                    let filePath = path;
+                    if(namespace) {
+                        // pending...
+                        const [bucketName, ... all] = path.split("/");
+                        filePath = all.join("/");
+                        // auto create bucket...
+                        bucket = await db.buckets.withKeys({ name: bucketName, namespaceID }).selectOrInsert();
+                    } else if(!bucket) {
+                        throw new EntityAccessError("namespace must or bucket must be specified");
+                    }
+                    await c.download(path, file);
+                    const files = await this.split(tf, file);
+                    await bfs.saveFile({ bucket, files, path: filePath });
                 }
-                await c.download(path, file);
-                const files = await this.split(tf, file);
-                await bfs.saveFile({ bucket, files, path: filePath });
+                await db.importTasks.withKeys({ taskID }).update({
+                    status: "started",
+                    nextToken: next,
+                    dateUpdated: DateTime.now
+                });
+                nextToken = next;
             }
-            nextToken = next;
+        } catch (error) {
+            await db.importTasks.withKeys({ taskID }).update({
+                status: "failed",
+                dateUpdated: DateTime.now
+            });
+            console.error(error);
+            return total;
         }
+
+        await db.importTasks.withKeys({ taskID }).update({
+            status: "completed",
+            nextToken: null,
+            dateUpdated: DateTime.now
+        });
+
+        return total;
         
     }
 
@@ -92,7 +123,7 @@ export default class ImportActionWorkflow extends Workflow<number> {
     ) {
         for(let i=0;i<100;i++) {
             const tasks = await db.importTasks.where({ start }, (x, p) => x.taskID > p.start
-                    && x.status === "started"
+                    && x.status !== "completed"
                 )
                 .limit(100)
                 .orderBy((x) => x.taskID)

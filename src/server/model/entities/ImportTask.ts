@@ -5,6 +5,8 @@ import Table from "@entity-access/entity-access/dist/decorators/Table.js";
 import { JsonProperty } from "@entity-access/server-pages/dist/services/ModelService.js";
 import Namespace from "./Namespace.js";
 import Bucket from "./Bucket.js";
+import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
+import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
 
 const sourceTypes = [ "s3", "azure-blob", "cloud-kosh-ns", "cloud-kosh-bucket" ] as const;
 export type sourceTypesType = typeof sourceTypes[number];
@@ -66,8 +68,14 @@ export default class ImportTask {
     @Column({ dataType: "Char", nullable: true})
     encryptedSecretAccessKey: string;
 
-     @Column({ dataType: "Char", nullable: true})
+    @Column({ dataType: "Char", nullable: true})
     container: string;
+
+    @Column({ dataType: "DateTime", default: () => Sql.date.now()})
+    dateCreated: DateTime;
+
+    @Column({ dataType: "DateTime", default: () => Sql.date.now()})
+    dateUpdated: DateTime;
 
     @JsonProperty({})
     connectionString: string;
