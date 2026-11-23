@@ -1,6 +1,7 @@
 import CheckConstraint from "@entity-access/entity-access/dist/decorators/CheckConstraint.js";
 import Column from "@entity-access/entity-access/dist/decorators/Column.js";
 import Table from "@entity-access/entity-access/dist/decorators/Table.js";
+import { JsonProperty } from "@entity-access/server-pages/dist/services/ModelService.js";
 
 const sourceTypes = [ "s3", "azure-blob" ] as const;
 export type sourceTypesType = typeof sourceTypes[number];
@@ -30,5 +31,21 @@ export default class ImportTask {
     encryptedConnectionString: string;
 
     @Column({ dataType: "Char", nullable: true})
-    encryptedBucket: string;
+    region: string;
+
+    @Column({ dataType: "Char", nullable: true})
+    endpoint: string;
+
+    @Column({ dataType: "Char", nullable: true})
+    accessKeyID: string;
+
+    @Column({ dataType: "Char", nullable: true})
+    encryptedSecretAccessKey: string;
+
+    @JsonProperty({})
+    connectionString: string;
+
+    @JsonProperty({})
+    secretAccessKey: string;
+
 }

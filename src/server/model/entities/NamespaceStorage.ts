@@ -4,6 +4,7 @@ import Table from "@entity-access/entity-access/dist/decorators/Table.js";
 import Namespace from "./Namespace.js";
 import Index from "@entity-access/entity-access/dist/decorators/Index.js";
 import type StorageContent from "./StorageContent.js";
+import { JsonProperty } from "@entity-access/server-pages/dist/services/ModelService.js";
 
 const storageTypes = [ "s3", "disk" ] as const;
 export type storageType = typeof storageTypes[number];
@@ -51,11 +52,14 @@ export default class NamespaceStorage {
     @Column({dataType:"Char", length: 200, nullable: true })
     region: string;
 
-    @Column({ dataType: "Char", length: 400 })
-    encryptedAccessKeyID: string;
+    @Column({ dataType: "Char", length: 400, nullable: true })
+    accessKeyID: string;
 
-    @Column({ dataType: "Char", length: 400 })
-    encryptedKeySecret: string;
+    @Column({ dataType: "Char", length: 400, nullable: true })
+    encryptedSecretAccessKey: string;
+
+    @JsonProperty({})
+    secretAccessKey: string;
 
     namespace: Namespace;
     storageContents: StorageContent[];
