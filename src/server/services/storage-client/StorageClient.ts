@@ -4,6 +4,7 @@ export interface IObject {
     path: string;
     md5?: Uint8Array;
     sha256?: string;
+    size: number;
 }
 
 export interface IObjectList {

@@ -71,6 +71,12 @@ export default class ImportTask {
     @Column({ dataType: "Char", nullable: true})
     container: string;
 
+    @Column({ dataType: "BigInt", default: () => 0})
+    objectsImported: number;
+
+    @Column({ dataType: "BigInt", default: () => 0})
+    sizeImported: number;
+
     @Column({ dataType: "DateTime", default: () => Sql.date.now()})
     dateCreated: DateTime;
 

@@ -67,14 +67,19 @@ export default class ImportActionWorkflow extends Workflow<number> {
 
         try {
 
-            let { nextToken, bucket, namespace, namespaceID } = task;
+            let { nextToken, bucket, namespace, namespaceID, objectsImported, sizeImported } = task;
+
+            objectsImported ??= 0;
+            sizeImported ??= 0;
 
             const c = sc.create(task);
 
             for await(const { objects, next } of c.list(nextToken)) {
                 // save all files...
-                for(const { path } of objects ) {
+                for(const { path, size } of objects ) {
                     total++;
+                    objectsImported++;
+                    sizeImported += size;
                     const file = tf.createTempFile(basename(path));
                     let filePath = path;
                     if(namespace) {
@@ -89,6 +94,12 @@ export default class ImportActionWorkflow extends Workflow<number> {
                     await c.download(path, file);
                     const files = await this.split(tf, file);
                     await bfs.saveFile({ bucket, files, path: filePath });
+
+                    await db.importTasks.withKeys({ taskID }).update({
+                        sizeImported,
+                        objectsImported,
+                        dateUpdated: DateTime.now
+                    });
                 }
                 await db.importTasks.withKeys({ taskID }).update({
                     status: "started",
