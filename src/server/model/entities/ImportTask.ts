@@ -66,6 +66,9 @@ export default class ImportTask {
     @Column({ dataType: "Char", nullable: true})
     encryptedSecretAccessKey: string;
 
+     @Column({ dataType: "Char", nullable: true})
+    container: string;
+
     @JsonProperty({})
     connectionString: string;
 
