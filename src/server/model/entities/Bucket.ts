@@ -63,7 +63,7 @@ export default class Bucket {
      * If specified, object can be read as public from this host,
      * useful for setting up CDN
      */
-    @Column({ dataType: "Char", length: 200 })
+    @Column({ dataType: "Char", length: 200, nullable: true })
     host: string;
 
     @Column({ dataType: "DateTime", default: () => Sql.date.now()})
