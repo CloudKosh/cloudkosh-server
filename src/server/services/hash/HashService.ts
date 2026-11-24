@@ -1,8 +1,8 @@
-import { RegisterScoped } from "@entity-access/entity-access/dist/di/di.js";
+import { RegisterSingleton } from "@entity-access/entity-access/dist/di/di.js";
 import { LocalFile } from "@entity-access/server-pages/dist/core/LocalFile.js";
 import { createHash } from "node:crypto";
 
-@RegisterScoped
+@RegisterSingleton
 export default class HashService {
 
     async hash(file: LocalFile) {
