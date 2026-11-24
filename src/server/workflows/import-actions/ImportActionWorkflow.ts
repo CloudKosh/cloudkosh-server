@@ -86,6 +86,8 @@ export default class ImportActionWorkflow extends Workflow<number> {
                     // @ts-expect-error protected
                     tasks.push(tm.queueRun(async () => {
 
+                        console.log(`Importing ${path}`);
+
                         let filePath = path;
                         if(namespace) {
                             // pending...
