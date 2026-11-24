@@ -58,7 +58,7 @@ export default class ImportActionWorkflow extends Workflow<number> {
         const id = this.input;
         const task = await db.importTasks
             .where({ id }, (x, p) => x.taskID === p.id)
-            .include((x) => [x.bucket, x.destNamespace])
+            .include((x) => [x.destBucket, x.destNamespace])
             .first();
 
         const { taskID } = task;
