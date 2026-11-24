@@ -97,9 +97,9 @@ export default class ImportActionWorkflow extends Workflow<number> {
                         continue;
                     }
 
-                    total++;
-                    objectsImported++;
-                    sizeImported += size;
+                    total = Number(total) + 1;
+                    objectsImported = Number(objectsImported) + 1;
+                    sizeImported = Number(sizeImported) + Number(size);
                     const file = tf.createTempFile(basename(path));
                     await c.download(path, file);
                     const files = await this.split(tf, file);
