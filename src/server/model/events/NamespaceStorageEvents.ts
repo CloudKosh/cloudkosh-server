@@ -5,11 +5,15 @@ import ChangeEntry from "@entity-access/entity-access/dist/model/changes/ChangeE
 import Inject from "@entity-access/entity-access/dist/di/di.js";
 import KoshDbContext from "../KoshDbContext.js";
 import EntityAccessError from "@entity-access/entity-access/dist/common/EntityAccessError.js";
+import EncryptionService from "../../services/encryption/EncryptionService.js";
 
 export default class NamespaceStorageEvents extends AuthenticatedEvents<NamespaceStorage> {
 
     @Inject
     private db: KoshDbContext;
+
+    @Inject
+    private es: EncryptionService;
 
     filter(query: IEntityQuery<NamespaceStorage>) {
         if(this.sessionUser.isAdmin) {
@@ -28,6 +32,12 @@ export default class NamespaceStorageEvents extends AuthenticatedEvents<Namespac
 
     includeFilter(query: IEntityQuery<NamespaceStorage>, type?: any, key?: string) {
         return query;
+    }
+
+    beforeInsert(entity: NamespaceStorage, entry: ChangeEntry<NamespaceStorage>) {
+        if(entity.secretAccessKey) {
+            entity.encryptedSecretAccessKey = this.es.general.encrypt(entity.secretAccessKey);
+        }
     }
 
     async afterInsert(entity: NamespaceStorage, entry: ChangeEntry<NamespaceStorage>) {
