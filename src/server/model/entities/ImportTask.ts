@@ -1,4 +1,3 @@
-import CheckConstraint from "@entity-access/entity-access/dist/decorators/CheckConstraint.js";
 import Column from "@entity-access/entity-access/dist/decorators/Column.js";
 import { RelateTo } from "@entity-access/entity-access/dist/decorators/Relate.js";
 import Table from "@entity-access/entity-access/dist/decorators/Table.js";
@@ -16,24 +15,12 @@ export type statusType = typeof statusTypes[number];
 
 
 @Table("ImportTasks")
-@CheckConstraint({
-    name: "CC_Import_Tasks_Bucket_Or_Namespace",
-    filter: (x) => (x.destBucketID === null && x.destNamespaceID !== null)
-        || (x.destBucketID !== null && x.destNamespaceID === null)
-})
 export default class ImportTask {
 
     @Column({ dataType: "BigInt", key: true, generated: "identity"})
     taskID: number;
 
-    @Column({ dataType: "BigInt", nullable: true})
-    @RelateTo(Bucket, {
-        property: (x) => x.destBucket,
-        inverseProperty: (x) => x.importTasks
-    })
-    destBucketID: number;
-
-    @Column({ dataType: "BigInt", nullable: true})
+    @Column({ dataType: "BigInt"})
     @RelateTo(Namespace, {
         property: (x) => x.destNamespace,
         inverseProperty: (x) => x.importTasks,
@@ -43,6 +30,13 @@ export default class ImportTask {
         }
     })
     destNamespaceID: number;
+
+    @Column({ dataType: "BigInt", nullable: true})
+    @RelateTo(Bucket, {
+        property: (x) => x.destBucket,
+        inverseProperty: (x) => x.importTasks
+    })
+    destBucketID: number;
 
     @Column({ dataType: "Char", enum: statusTypes, default: () => "started"})
     status: statusType;
