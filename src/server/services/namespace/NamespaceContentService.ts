@@ -73,7 +73,7 @@ export default class NamespaceContentService {
 
             const ns = await db.namespaces.withKeys({ id: namespaceID }).select();
             if(!ns.isReady) {
-                throw new EntityAccessError(`Atleast one remote storage must be added to the namespace.`);
+                throw new EntityAccessError(`At least one remote storage must be added to the namespace.`);
             }
 
             let c = await db.namespaceContents
@@ -89,7 +89,7 @@ export default class NamespaceContentService {
 
             
             await using tx = await db.connection.createTransaction(); 
-            const keyPath = "";
+            let keyPath = "";
 
             // insert...
             c = await db.namespaceContents.statements.insert({
@@ -101,7 +101,7 @@ export default class NamespaceContentService {
 
             const { contentID } = c;
 
-            c.keyPath = `${sha256.toString("hex")}/${c.contentID}`;
+            c.keyPath = keyPath = `${sha256.toString("hex")}/${c.contentID}`;
             await db.namespaceContents.withKeys({
                 namespaceID,
                 contentID,
