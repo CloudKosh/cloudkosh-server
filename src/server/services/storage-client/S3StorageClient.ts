@@ -27,6 +27,11 @@ export default class S3StorageClient extends StorageClient {
             Key
         }));
 
+        if(r.ContentType) {
+            // @ts-expect-error readonly
+            file.contentType = r.ContentType;
+        }
+
         await file.writeAll(r.Body as Readable);
     }
 

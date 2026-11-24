@@ -76,6 +76,7 @@ export default class BucketFileService {
     async saveFile({
         bucket: { bucketID, namespaceID },
         path,
+        contentType,
         files,
         keys,
         urls
@@ -84,7 +85,8 @@ export default class BucketFileService {
         keys?: string[],
         urls?: string[],
         files?: LocalFile[],
-        path: string
+        path: string,
+        contentType?: string
     }) {
 
         let contentIDs: number[];
@@ -125,11 +127,15 @@ export default class BucketFileService {
         await using tx = await this.db.connection.createTransaction();
 
         const size = files.reduce((p, x) => x.contentSize + p,0);
+
+        if(!contentType) {
+            contentType = "application/octet-stream";
+        }
         
         const { bucketFileID } = await this.db.bucketFiles.statements.insert({
             bucketID,
             path,
-            contentType: "application/octet-stream",
+            contentType,
             size
         });
 

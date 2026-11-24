@@ -93,7 +93,12 @@ export default class ImportActionWorkflow extends Workflow<number> {
                     }
                     await c.download(path, file);
                     const files = await this.split(tf, file);
-                    await bfs.saveFile({ bucket: koshBucket, files, path: filePath });
+                    await bfs.saveFile({
+                        bucket: koshBucket,
+                        files,
+                        path: filePath,
+                        contentType: file.contentType
+                    });
 
                     await db.importTasks.withKeys({ taskID }).update({
                         sizeImported,

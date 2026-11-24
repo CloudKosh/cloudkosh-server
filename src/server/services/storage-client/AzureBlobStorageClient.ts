@@ -21,7 +21,11 @@ export default class AzureBlobStorageClient extends StorageClient {
     }
 
     async read(path: string, file: LocalFile) {
-        await this.client.getBlobClient(path).downloadToFile(file.path);
+        const r = await this.client.getBlobClient(path).downloadToFile(file.path);
+        if(r.contentType) {
+            // @ts-expect-error readonly
+            file.contentType = r.contentType;
+        }
     }
 
     async * listObjects(prefix, continuationToken: string): AsyncGenerator<IObjectList> {
