@@ -28,7 +28,7 @@ export default class ImportTask {
 
     @Column({ dataType: "BigInt", nullable: true})
     @RelateTo(Bucket, {
-        property: (x) => x.bucket,
+        property: (x) => x.koshBucket,
         inverseProperty: (x) => x.importTasks
     })
     bucketID: number;
@@ -58,6 +58,9 @@ export default class ImportTask {
 
     @Column({ dataType: "Char", nullable: true})
     encryptedConnectionString: string;
+
+    @Column({ dataType: "Char", nullable: true})
+    bucket: string;
 
     @Column({ dataType: "Char", nullable: true})
     region: string;
@@ -93,6 +96,6 @@ export default class ImportTask {
     secretAccessKey: string;
 
     namespace: Namespace;
-    bucket: Bucket;
+    koshBucket: Bucket;
 
 }

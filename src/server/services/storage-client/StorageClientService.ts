@@ -6,6 +6,19 @@ import type StorageClient from "./StorageClient.js";
 import EntityAccessError from "@entity-access/entity-access/dist/common/EntityAccessError.js";
 import AzureBlobStorageClient from "./AzureBlobStorageClient.js";
 
+export interface IRemoteStorage {
+    sourceType?: "s3" | "azure-blobs" | "azure-blob" | "cloud-kosh-bucket" | "cloud-kosh-ns" | "disk";
+    type?: "s3" | "azure-blobs" | "azure-blob" | "cloud-kosh-bucket" | "cloud-kosh-ns" | "disk";
+    accessKeyID: string;
+    encryptedSecretAccessKey: string;
+    encryptedConnectionString?: string;
+    container?: string;
+    root?: string;
+    region: string;
+    endpoint: string;
+    bucket: string;
+}
+
 @RegisterSingleton
 export default class StorageClientService {
 
@@ -22,7 +35,7 @@ export default class StorageClientService {
         region,
         endpoint,
         bucket
-    }) {
+    }: IRemoteStorage) {
 
         switch(type) {
         

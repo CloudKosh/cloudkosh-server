@@ -67,7 +67,7 @@ export default class ImportActionWorkflow extends Workflow<number> {
 
         try {
 
-            let { nextToken, bucket, namespace, namespaceID, objectsImported, sizeImported } = task;
+            let { nextToken, koshBucket, namespace, namespaceID, objectsImported, sizeImported } = task;
 
             objectsImported ??= 0;
             sizeImported ??= 0;
@@ -87,13 +87,13 @@ export default class ImportActionWorkflow extends Workflow<number> {
                         const [bucketName, ... all] = path.split("/");
                         filePath = all.join("/");
                         // auto create bucket...
-                        bucket = await db.buckets.withKeys({ name: bucketName, namespaceID }).selectOrInsert();
-                    } else if(!bucket) {
+                        koshBucket = await db.buckets.withKeys({ name: bucketName, namespaceID }).selectOrInsert();
+                    } else if(!koshBucket) {
                         throw new EntityAccessError("namespace must or bucket must be specified");
                     }
                     await c.download(path, file);
                     const files = await this.split(tf, file);
-                    await bfs.saveFile({ bucket, files, path: filePath });
+                    await bfs.saveFile({ bucket: koshBucket, files, path: filePath });
 
                     await db.importTasks.withKeys({ taskID }).update({
                         sizeImported,

@@ -25,11 +25,15 @@ export default class ImportTaskEvents extends AuthenticatedEvents<ImportTask> {
                     x.namespace.namespaceUsers
                         .some((u) =>
                             u.userID === p.userID)
-                    || x.bucket.namespace.namespaceUsers
+                    || x.koshBucket.namespace.namespaceUsers
                         .some((u) =>
                             u.userID === p.userID)
             );
 
+    }
+
+    beforeInsert(entity: ImportTask, entry: ChangeEntry<ImportTask>) {
+        entity.root = entity.root?.trim();
     }
 
     async afterInsert(entity: ImportTask, entry: ChangeEntry<ImportTask>) {
