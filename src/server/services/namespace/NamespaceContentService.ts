@@ -101,8 +101,9 @@ export default class NamespaceContentService {
 
             const { contentID } = c;
 
-            c.keyPath = `${sha256.toString("base64url")}/${c.contentID}`;
+            c.keyPath = `${sha256.toString("hex")}/${c.contentID}`;
             await db.namespaceContents.withKeys({
+                namespaceID,
                 contentID,
             }).update({
                 keyPath
