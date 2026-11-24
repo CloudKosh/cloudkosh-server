@@ -48,6 +48,12 @@ export default class NamespaceStorageEvents extends AuthenticatedEvents<Namespac
     }
 
     async beforeDelete(entity: NamespaceStorage, entry: ChangeEntry<NamespaceStorage>) {
+
+        // allow delete if no storage content exists..
+        const hasContent = await this.db.storageContents.where(entity, (x, p) => x.storageID === p.storageID).some();
+        if(!hasContent) {
+            return;
+        }
         const existsRemote = await this.db.namespaceStorages.where(entity, (x, p) => x.namespaceID === p.namespaceID
             && x.storageID !== p.storageID
             && x.type !== "disk"
