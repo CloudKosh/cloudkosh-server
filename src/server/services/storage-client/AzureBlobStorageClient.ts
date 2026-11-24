@@ -32,8 +32,13 @@ export default class AzureBlobStorageClient extends StorageClient {
             prefix = void 0;
         }
 
-        for await(const page of await this.client.listBlobsFlat({
-            prefix, includeMetadata: true, responseFormat: "Arrow"}).byPage({
+        if(!continuationToken) {
+            continuationToken = void 0;
+        }
+
+        for await(const page of this.client.listBlobsFlat({
+            prefix, includeMetadata: true
+        }).byPage({
             continuationToken
         })) {
             yield {
@@ -43,6 +48,11 @@ export default class AzureBlobStorageClient extends StorageClient {
                     size: x.properties.contentLength
                 })),
                 next: page.continuationToken
+            }
+
+            continuationToken = page.continuationToken;
+            if(!continuationToken) {
+                break;
             }
         }
         

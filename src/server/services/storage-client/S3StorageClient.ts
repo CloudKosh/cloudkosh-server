@@ -50,7 +50,11 @@ export default class S3StorageClient extends StorageClient {
                     path: x.Key,
                     size: x.Size
                 })),
-                next: r.NextContinuationToken
+                next
+            }
+
+            if(!next) {
+                break;
             }
         }
 
