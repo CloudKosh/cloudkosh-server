@@ -1,5 +1,4 @@
 import { LocalFile } from "@entity-access/server-pages/dist/core/LocalFile.js";
-import { join } from "node:path";
 
 export interface IObject {
     path: string;
