@@ -11,11 +11,10 @@ export default class NamespaceEvents extends AuthenticatedEvents<Namespace> {
     @Inject db: KoshDbContext;
 
     filter(query: IEntityQuery<Namespace>) {
-        if(!this.verify) {
+        if(this.sessionUser.isAdmin) {
             return query;
         }
-        this.sessionUser.ensureLoggedIn();
-        if(this.sessionUser.isAdmin) {
+        if(!this.verify) {
             return query;
         }
         return query
