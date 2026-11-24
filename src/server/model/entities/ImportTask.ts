@@ -54,6 +54,9 @@ export default class ImportTask {
     sourceType: sourceTypesType;
 
     @Column({ dataType: "Char", nullable: true})
+    root: string;
+
+    @Column({ dataType: "Char", nullable: true})
     encryptedConnectionString: string;
 
     @Column({ dataType: "Char", nullable: true})

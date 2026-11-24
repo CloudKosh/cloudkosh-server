@@ -5,11 +5,15 @@ import { Readable } from "stream";
 
 export default class S3StorageClient extends StorageClient {
 
-    constructor(private readonly client: S3Client, private readonly bucket: string) {
-        super();
+    constructor(
+        private readonly client: S3Client,
+        private readonly bucket: string,
+        root: string = void 0
+    ) {
+        super(root);
     }
 
-    async save(Key: string, file: LocalFile) {
+    async write(Key: string, file: LocalFile) {
         await this.client.send(new PutObjectCommand({
             Bucket: this.bucket,
             Key,
@@ -17,7 +21,7 @@ export default class S3StorageClient extends StorageClient {
         }));    
     }
 
-    async download(Key: string, file: LocalFile) {        
+    async read(Key: string, file: LocalFile) {        
         const r = await this.client.send(new GetObjectCommand({
             Bucket: this.bucket,
             Key
@@ -26,10 +30,11 @@ export default class S3StorageClient extends StorageClient {
         await file.writeAll(r.Body as Readable);
     }
 
-    async *list(next): AsyncGenerator<IObjectList> {
+    async *listObjects(Prefix, next): AsyncGenerator<IObjectList> {
         for(;;) {
             const r = await this.client.send(new ListObjectsV2Command({
                 Bucket: this.bucket,
+                Prefix,
                 ContinuationToken: next
             }));
 

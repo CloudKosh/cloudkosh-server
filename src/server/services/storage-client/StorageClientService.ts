@@ -18,6 +18,7 @@ export default class StorageClientService {
         encryptedSecretAccessKey,
         encryptedConnectionString = void 0,
         container= void 0,
+        root = void 0,
         region,
         endpoint,
         bucket
@@ -37,13 +38,13 @@ export default class StorageClientService {
                         secretAccessKey
                     }
                 });
-                return new S3StorageClient(client, bucket) as StorageClient;
+                return new S3StorageClient(client, bucket, root) as StorageClient;
             
             case "azure-blob":
             case "azure-blobs":
 
                 const connectionString = this.es.general.decrypt(encryptedConnectionString);
-                return new AzureBlobStorageClient(connectionString, container);
+                return new AzureBlobStorageClient(connectionString, container, root);
 
         }
 
