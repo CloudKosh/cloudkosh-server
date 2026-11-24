@@ -44,6 +44,7 @@ services:
       - ck-cache:/cache
     ports:
       - 9229:9229
+      - 5432:5432
     networks:
       - ck_network
     dns:
