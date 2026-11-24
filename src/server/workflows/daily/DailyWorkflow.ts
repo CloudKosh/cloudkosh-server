@@ -1,6 +1,7 @@
 import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 import TimeSpan from "@entity-access/entity-access/dist/types/TimeSpan.js";
 import Workflow, { UniqueActivity } from "@entity-access/entity-access/dist/workflows/Workflow.js";
+import ImportActionWorkflow from "../import-actions/ImportActionWorkflow.js";
 
 export default class DailyWorkflow extends Workflow {
 
@@ -31,5 +32,6 @@ export default class DailyWorkflow extends Workflow {
         index: number,
     ) {
         // start workflows....
+        await ImportActionWorkflow.queue(this.context);
     }
 }
