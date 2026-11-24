@@ -3,6 +3,7 @@ import AppWorkflowContext from "./AppWorkflowContext.js";
 import sleep from "../../common/sleep.js";
 import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 import DailyWorkflow from "./daily/DailyWorkflow.js";
+import ImportActionWorkflow from "./import-actions/ImportActionWorkflow.js";
 
 export default class KoshWorkflowContext extends AppWorkflowContext {
 
@@ -10,6 +11,7 @@ export default class KoshWorkflowContext extends AppWorkflowContext {
         super(s);
 
         this.register(DailyWorkflow);
+        this.register(ImportActionWorkflow);
     }
 
 
