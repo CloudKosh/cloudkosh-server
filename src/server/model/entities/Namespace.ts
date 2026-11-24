@@ -27,7 +27,7 @@ import type ImportTask from "./ImportTask.js";
 })
 export default class Namespace {
 
-    @Column({ dataType: "Char", key: true, generated: "identity"})
+    @Column({ dataType: "BigInt", key: true, generated: "identity"})
     id: number;
 
     @Column({ dataType: "Char", length: 200 })

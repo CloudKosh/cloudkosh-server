@@ -20,7 +20,7 @@ export type devicePushType = typeof devicePushTypes[number];
 })
 export default class LoginSession {
 
-    @Column({ key: true, generated: "identity"})
+    @Column({ dataType:"BigInt",  key: true, generated: "identity"})
     public sessionID: number;
 
     @Column({ dataType: "BigInt"})
