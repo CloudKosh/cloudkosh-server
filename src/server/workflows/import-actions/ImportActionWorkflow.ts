@@ -75,53 +75,51 @@ export default class ImportActionWorkflow extends Workflow<number> {
 
             const c = sc.create(task);
 
-            for await(const { objects, next } of c.list(nextToken)) {
+            const { objects, next } = await c.list(nextToken); 
 
-                const tm = new TaskManager();
-                const tasks = [] as Promise<any>[];
+            const tm = new TaskManager();
+            const tasks = [] as Promise<any>[];
 
-                // save all files...
-                for(const { path, size } of objects ) {
+            // save all files...
+            for(const { path, size } of objects ) {
 
-                    // @ts-expect-error protected
-                    tasks.push(tm.queueRun(async () => {
+                // @ts-expect-error protected
+                tasks.push(tm.queueRun(async () => {
 
-                        console.log(`Importing ${path}`);
+                    console.log(`Importing ${path}`);
 
-                        let filePath = path;
-                        if(namespace) {
-                            // pending...
-                            const [bucketName, ... all] = path.split("/");
-                            filePath = all.join("/");
-                            // auto create bucket...
-                            koshBucket = await db.buckets.withKeys({ name: bucketName, namespaceID }).selectOrInsert();
-                        } else if(!koshBucket) {
-                            throw new EntityAccessError("namespace must or bucket must be specified");
-                        }
+                    let filePath = path;
+                    if(namespace) {
+                        // pending...
+                        const [bucketName, ... all] = path.split("/");
+                        filePath = all.join("/");
+                        // auto create bucket...
+                        koshBucket = await db.buckets.withKeys({ name: bucketName, namespaceID }).selectOrInsert();
+                    } else if(!koshBucket) {
+                        throw new EntityAccessError("namespace must or bucket must be specified");
+                    }
 
-                        // if exists.. skip...
-                        const exists = await db.bucketFiles.withKeys({ bucketID: koshBucket.bucketID, path: filePath })
-                            .select();
+                    // if exists.. skip...
+                    const exists = await db.bucketFiles.withKeys({ bucketID: koshBucket.bucketID, path: filePath })
+                        .select();
 
-                        if(exists) {
-                            return
-                        }
+                    if(exists) {
+                        return
+                    }
 
-                        total = Number(total) + 1;
-                        objectsImported = Number(objectsImported) + 1;
-                        sizeImported = Number(sizeImported) + Number(size);
-                        const file = tf.createTempFile(basename(path));
-                        await c.download(path, file);
-                        const files = await this.split(tf, file);
-                        await bfs.saveFile({
-                            bucket: koshBucket,
-                            files,
-                            path: filePath,
-                            contentType: file.contentType
-                        });
-                    }));
-
-                }
+                    total = Number(total) + 1;
+                    objectsImported = Number(objectsImported) + 1;
+                    sizeImported = Number(sizeImported) + Number(size);
+                    const file = tf.createTempFile(basename(path));
+                    await c.download(path, file);
+                    const files = await this.split(tf, file);
+                    await bfs.saveFile({
+                        bucket: koshBucket,
+                        files,
+                        path: filePath,
+                        contentType: file.contentType
+                    });
+                }));
 
                 await Promise.all(tasks);
 

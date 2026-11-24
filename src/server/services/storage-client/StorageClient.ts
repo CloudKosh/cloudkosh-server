@@ -40,6 +40,6 @@ export default abstract class StorageClient {
 
     protected abstract read(path: string, file: LocalFile): Promise<void>;
 
-    protected abstract listObjects(prefix: string, nextToken: string): AsyncGenerator<IObjectList>
+    protected abstract listObjects(prefix: string, nextToken: string): Promise<IObjectList>
     
 }

@@ -35,32 +35,26 @@ export default class S3StorageClient extends StorageClient {
         await file.writeAll(r.Body as Readable);
     }
 
-    async *listObjects(Prefix, next): AsyncGenerator<IObjectList> {
+    async listObjects(Prefix, next): Promise<IObjectList> {
 
         if(!Prefix) {
             Prefix = void 0;
         }
 
-        for(;;) {
-            const r = await this.client.send(new ListObjectsV2Command({
-                Bucket: this.bucket,
-                Prefix,
-                ContinuationToken: next
-            }));
+        const r = await this.client.send(new ListObjectsV2Command({
+            Bucket: this.bucket,
+            Prefix,
+            ContinuationToken: next
+        }));
 
-            next = r.NextContinuationToken;
+        next = r.NextContinuationToken;
 
-            yield {
-                objects: r.Contents.map((x) => ({
-                    path: x.Key,
-                    size: x.Size
-                })),
-                next
-            }
-
-            if(!next) {
-                break;
-            }
+        return {
+            objects: r.Contents.map((x) => ({
+                path: x.Key,
+                size: x.Size
+            })),
+            next
         }
 
     }

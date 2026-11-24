@@ -28,7 +28,7 @@ export default class AzureBlobStorageClient extends StorageClient {
         }
     }
 
-    async * listObjects(prefix, continuationToken: string): AsyncGenerator<IObjectList> {
+    async listObjects(prefix, continuationToken: string): Promise<IObjectList> {
 
         console.log(`Listing ${prefix} from ${this.client.accountName}/${this.client.containerName}`)
 
@@ -41,11 +41,13 @@ export default class AzureBlobStorageClient extends StorageClient {
         }
 
         for await(const page of this.client.listBlobsFlat({
-            prefix, includeMetadata: true
+            prefix,
+            includeMetadata: true,
+            
         }).byPage({
             continuationToken
         })) {
-            yield {
+            return {
                 objects: page.segment.blobItems.map((x) => ({
                     path: x.name,
                     md5: x.properties.contentMD5,
@@ -54,13 +56,8 @@ export default class AzureBlobStorageClient extends StorageClient {
                 next: page.continuationToken
             }
 
-            continuationToken = page.continuationToken;
-            if(!continuationToken) {
-                break;
-            }
         }
         
-        console.log(`Listing done ${prefix} from ${this.client.accountName}/${this.client.containerName}`)
     }
 
 }
