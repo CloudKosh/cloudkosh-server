@@ -107,6 +107,9 @@ export default class ImportActionWorkflow extends Workflow<number> {
                     dateUpdated: DateTime.now
                 });
                 nextToken = next;
+                if(total > 10000) {
+                    break;
+                }
             }
         } catch (error) {
             await db.importTasks.withKeys({ taskID }).update({
