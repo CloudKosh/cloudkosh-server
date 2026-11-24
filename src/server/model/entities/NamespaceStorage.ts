@@ -50,6 +50,9 @@ export default class NamespaceStorage {
     @Column({ dataType: "Char", length: 200 })
     bucket: string;
 
+    @Column({ dataType: "Char", length: 200, nullable: true })
+    root: string;
+
     @Column({dataType:"Char", length: 200, nullable: true })
     endpoint: string;
 
