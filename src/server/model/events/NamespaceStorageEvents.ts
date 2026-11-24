@@ -31,9 +31,9 @@ export default class NamespaceStorageEvents extends AuthenticatedEvents<Namespac
         return query;
     }
 
-    afterInsert(entity: NamespaceStorage, entry: ChangeEntry<NamespaceStorage>) {
+    async afterInsert(entity: NamespaceStorage, entry: ChangeEntry<NamespaceStorage>) {
         // set ready only if one remote storage is added...
-        this.db.namespaces.where(entity, (x, p) => x.id === p.namespaceID && x.storages.some((s) => s.type === "s3"))
+        await this.db.namespaces.where(entity, (x, p) => x.id === p.namespaceID && x.storages.some((s) => s.type === "s3"))
             .update((x) => ({ isReady: true }));
     }
 
