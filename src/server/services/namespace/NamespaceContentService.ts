@@ -95,7 +95,8 @@ export default class NamespaceContentService {
             c = await db.namespaceContents.statements.insert({
                 namespaceID,
                 keyPath,
-                sha256
+                sha256,
+                size: file.contentSize
             });
 
             const { contentID } = c;
