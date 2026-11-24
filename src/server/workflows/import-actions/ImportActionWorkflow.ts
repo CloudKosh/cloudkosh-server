@@ -58,7 +58,7 @@ export default class ImportActionWorkflow extends Workflow<number> {
         const id = this.input;
         const task = await db.importTasks
             .where({ id }, (x, p) => x.taskID === p.id)
-            .include((x) => [x.bucket, x.namespace])
+            .include((x) => [x.bucket, x.destNamespace])
             .first();
 
         const { taskID } = task;
@@ -67,7 +67,7 @@ export default class ImportActionWorkflow extends Workflow<number> {
 
         try {
 
-            let { nextToken, koshBucket, namespace, namespaceID, objectsImported, sizeImported } = task;
+            let { nextToken, destBucket: koshBucket, destNamespace: namespace, destNamespaceID: namespaceID, objectsImported, sizeImported } = task;
 
             objectsImported ??= 0;
             sizeImported ??= 0;

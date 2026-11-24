@@ -22,10 +22,10 @@ export default class ImportTaskEvents extends AuthenticatedEvents<ImportTask> {
         return query
             .where(this.sessionUser,
                 (x, p) =>
-                    x.namespace.namespaceUsers
+                    x.destNamespace.namespaceUsers
                         .some((u) =>
                             u.userID === p.userID)
-                    || x.koshBucket.namespace.namespaceUsers
+                    || x.destBucket.namespace.namespaceUsers
                         .some((u) =>
                             u.userID === p.userID)
             );

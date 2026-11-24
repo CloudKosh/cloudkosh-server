@@ -18,8 +18,8 @@ export type statusType = typeof statusTypes[number];
 @Table("ImportTasks")
 @CheckConstraint({
     name: "CC_Import_Tasks_Bucket_Or_Namespace",
-    filter: (x) => (x.bucketID === null && x.namespaceID !== null)
-        || (x.bucketID !== null && x.namespaceID === null)
+    filter: (x) => (x.destBucketID === null && x.destNamespaceID !== null)
+        || (x.destBucketID !== null && x.destNamespaceID === null)
 })
 export default class ImportTask {
 
@@ -28,21 +28,21 @@ export default class ImportTask {
 
     @Column({ dataType: "BigInt", nullable: true})
     @RelateTo(Bucket, {
-        property: (x) => x.koshBucket,
+        property: (x) => x.destBucket,
         inverseProperty: (x) => x.importTasks
     })
-    bucketID: number;
+    destBucketID: number;
 
     @Column({ dataType: "BigInt", nullable: true})
     @RelateTo(Namespace, {
-        property: (x) => x.namespace,
+        property: (x) => x.destNamespace,
         inverseProperty: (x) => x.importTasks,
         foreignKeyConstraint: {
             name: "FC_ImportTasks_Namespace",
             onDelete:  "restrict"
         }
     })
-    namespaceID: number;
+    destNamespaceID: number;
 
     @Column({ dataType: "Char", enum: statusTypes, default: () => "started"})
     status: statusType;
@@ -95,7 +95,7 @@ export default class ImportTask {
     @JsonProperty({})
     secretAccessKey: string;
 
-    namespace: Namespace;
-    koshBucket: Bucket;
+    destNamespace: Namespace;
+    destBucket: Bucket;
 
 }
