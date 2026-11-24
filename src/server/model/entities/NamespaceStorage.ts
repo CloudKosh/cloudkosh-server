@@ -29,7 +29,7 @@ export default class NamespaceStorage {
         property: (x) => x.namespace,
         inverseProperty: (x) => x.storages,
         foreignKeyConstraint: {
-            name: "FC_NamesoaceStorages_NamespaceID",
+            name: "FC_NamespaceStorages_NamespaceID",
             onDelete: "restrict"
         }
     })
