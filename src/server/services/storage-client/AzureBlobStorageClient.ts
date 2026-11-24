@@ -25,7 +25,15 @@ export default class AzureBlobStorageClient extends StorageClient {
     }
 
     async * listObjects(prefix, continuationToken: string): AsyncGenerator<IObjectList> {
-        for await(const page of await this.client.listBlobsFlat({ prefix, includeMetadata: true, responseFormat: "Arrow"}).byPage({
+
+        console.log(`Listing ${prefix} from ${this.client.accountName}/${this.client.containerName}`)
+
+        if(!prefix) {
+            prefix = void 0;
+        }
+
+        for await(const page of await this.client.listBlobsFlat({
+            prefix, includeMetadata: true, responseFormat: "Arrow"}).byPage({
             continuationToken
         })) {
             yield {
@@ -38,6 +46,7 @@ export default class AzureBlobStorageClient extends StorageClient {
             }
         }
         
+        console.log(`Listing done ${prefix} from ${this.client.accountName}/${this.client.containerName}`)
     }
 
 }

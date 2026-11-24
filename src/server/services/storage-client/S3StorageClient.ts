@@ -31,6 +31,11 @@ export default class S3StorageClient extends StorageClient {
     }
 
     async *listObjects(Prefix, next): AsyncGenerator<IObjectList> {
+
+        if(!Prefix) {
+            Prefix = void 0;
+        }
+
         for(;;) {
             const r = await this.client.send(new ListObjectsV2Command({
                 Bucket: this.bucket,
