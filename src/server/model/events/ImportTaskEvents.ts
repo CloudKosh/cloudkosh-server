@@ -5,10 +5,14 @@ import ChangeEntry from "@entity-access/entity-access/dist/model/changes/ChangeE
 import Inject from "@entity-access/entity-access/dist/di/di.js";
 import WorkflowContext from "@entity-access/entity-access/dist/workflows/WorkflowContext.js";
 import ImportActionWorkflow from "../../workflows/import-actions/ImportActionWorkflow.js";
+import EncryptionService from "../../services/encryption/EncryptionService.js";
 
 export default class ImportTaskEvents extends AuthenticatedEvents<ImportTask> {
 
     @Inject wc: WorkflowContext;
+
+    @Inject
+    private es: EncryptionService;
 
     filter(query: IEntityQuery<ImportTask>) {
 
@@ -34,6 +38,15 @@ export default class ImportTaskEvents extends AuthenticatedEvents<ImportTask> {
 
     beforeInsert(entity: ImportTask, entry: ChangeEntry<ImportTask>) {
         entity.root = entity.root?.trim();
+
+        if(entity.connectionString) {
+            entity.encryptedConnectionString = this.es.general.encrypt(entity.connectionString);
+        }
+
+        if(entity.secretAccessKey) {
+            entity.encryptedSecretAccessKey = this.es.general.encrypt(entity.secretAccessKey);
+        }
+
     }
 
     async afterInsert(entity: ImportTask, entry: ChangeEntry<ImportTask>) {
