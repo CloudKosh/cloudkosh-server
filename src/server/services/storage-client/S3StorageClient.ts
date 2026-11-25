@@ -1,6 +1,6 @@
 import { LocalFile } from "@entity-access/server-pages/dist/core/LocalFile.js";
 import StorageClient, { IObjectList } from "./StorageClient.js";
-import { GetObjectCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, GetObjectCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { Readable } from "stream";
 
 export default class S3StorageClient extends StorageClient {
@@ -33,6 +33,13 @@ export default class S3StorageClient extends StorageClient {
         }
 
         await file.writeAll(r.Body as Readable);
+    }
+
+    async deleteObject(Key: string) {
+        await this.client.send(new DeleteObjectCommand({
+            Bucket: this.bucket,
+            Key
+        }))
     }
 
     async listObjects(Prefix, next): Promise<IObjectList> {

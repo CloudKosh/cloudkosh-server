@@ -28,6 +28,11 @@ export default class AzureBlobStorageClient extends StorageClient {
         }
     }
 
+    async deleteObject(path: string) {
+        await this.client.getBlobClient(path).deleteIfExists();
+    }
+
+
     async listObjects(prefix, continuationToken: string): Promise<IObjectList> {
 
         console.log(`Listing ${prefix} from ${this.client.accountName}/${this.client.containerName}`)
