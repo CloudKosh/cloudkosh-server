@@ -14,6 +14,7 @@ import StorageContent from "./entities/StorageContent.js";
 import LoginSession from "./entities/LoginSession.js";
 import NamespaceUser from "./entities/NamespaceUser.js";
 import ImportTask from "./entities/ImportTask.js";
+import RateLimitToken from "./entities/RateLimitToken.js";
 
 export default class KoshDbContext extends AppDbContext {
 
@@ -44,6 +45,8 @@ export default class KoshDbContext extends AppDbContext {
     public namespaceUsers = this.model.register(NamespaceUser);
 
     public storageContents = this.model.register(StorageContent);
+
+    public rateLimitTokens = this.model.register(RateLimitToken);
 
     public users = this.model.register(User);
 
