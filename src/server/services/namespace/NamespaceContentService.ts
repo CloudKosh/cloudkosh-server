@@ -80,7 +80,7 @@ export default class NamespaceContentService {
                 .withKeys({ namespaceID, sha256 })
                 .select();
 
-            if(c) {
+            if(c?.ready) {
                 if(await this.isContentSame(c, file)) {
                     return c.contentID;
                 }
@@ -112,6 +112,14 @@ export default class NamespaceContentService {
             await tx.commit();
 
             await this.storageService.save(c, file);
+
+            await db.namespaceContents.withKeys({
+                namespaceID,
+                contentID,
+            }).update({
+                ready: true
+            });
+
             return c.contentID;
         }
         throw new EntityAccessError(`Could not store content`);

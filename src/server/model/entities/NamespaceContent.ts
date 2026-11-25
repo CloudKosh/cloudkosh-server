@@ -6,8 +6,18 @@ import type FileVersionBlock from "./FileVersionBlock.js";
 import { RelateTo } from "@entity-access/entity-access/dist/decorators/Relate.js";
 import Namespace from "./Namespace.js";
 import type StorageContent from "./StorageContent.js";
+import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
+import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
+import Index from "@entity-access/entity-access/dist/decorators/Index.js";
 
 @Table("NamespaceContents")
+@Index({
+    name: "IX_NamespaceContent_Partial",
+    columns: [
+        { name: (x) => x.dateCreated, descending: false }
+    ],
+    filter: (x) => x.ready === false
+})
 export default class NamespaceContent {
 
     @Column({dataType: "BigInt", key: true, generated: "identity"})
@@ -31,6 +41,9 @@ export default class NamespaceContent {
     size: number;
 
     @Column({ dataType: "Boolean", default: () => false})
+    ready: boolean;
+
+    @Column({ dataType: "Boolean", default: () => false})
     stale: boolean;
 
     /** 
@@ -39,6 +52,9 @@ export default class NamespaceContent {
      */
     @Column({ dataType:"Char", length: 1024 })
     keyPath: string;
+
+    @Column({ dataType: "DateTime", default: () => Sql.date.now()})
+    dateCreated: DateTime;
 
     fileBlocks: FileBlock[];
 

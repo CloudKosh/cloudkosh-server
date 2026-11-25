@@ -2,6 +2,7 @@ import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 import TimeSpan from "@entity-access/entity-access/dist/types/TimeSpan.js";
 import Workflow, { UniqueActivity } from "@entity-access/entity-access/dist/workflows/Workflow.js";
 import ImportActionWorkflow from "../import-actions/ImportActionWorkflow.js";
+import CleanPartialContentWorkflow from "../clean/CleanPartialContentWorkflow.js";
 
 export default class DailyWorkflow extends Workflow {
 
@@ -33,5 +34,6 @@ export default class DailyWorkflow extends Workflow {
     ) {
         // start workflows....
         await ImportActionWorkflow.queue(this.context);
+        await CleanPartialContentWorkflow.queue(this.context);
     }
 }

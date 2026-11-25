@@ -18,6 +18,13 @@ export default abstract class StorageClient {
 
     }
 
+    delete(path: string) {
+        if(this.root) {
+            path = `${this.root}/${path}`;
+        }
+        return this.deleteObject(path);
+    }
+
     public download(path: string, file: LocalFile) {
         if(this.root) {
             path = `${this.root}/${path}`;
@@ -39,6 +46,8 @@ export default abstract class StorageClient {
     protected abstract write(path: string, file: LocalFile): Promise<void>;
 
     protected abstract read(path: string, file: LocalFile): Promise<void>;
+
+    protected abstract deleteObject(path: string): Promise<void>;
 
     protected abstract listObjects(prefix: string, nextToken: string): Promise<IObjectList>
     
