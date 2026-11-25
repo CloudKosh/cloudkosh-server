@@ -3,7 +3,6 @@ import Workflow, { UniqueActivity } from "@entity-access/entity-access/dist/work
 import WorkflowContext from "@entity-access/entity-access/dist/workflows/WorkflowContext.js";
 import KoshDbContext from "../../model/KoshDbContext.js";
 import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
-import StorageService from "../../services/namespace/StorageService.js";
 import StorageClientService from "../../services/storage-client/StorageClientService.js";
 import Range from "../../../common/Range.js";
 
