@@ -1,7 +1,7 @@
 import Inject from "@entity-access/entity-access/dist/di/di.js";
 import { Prepare } from "@entity-access/server-pages/dist/decorators/Prepare.js";
 import Page from "@entity-access/server-pages/dist/Page.js";
-import KoshDbContext from "../../../../../server/model/KoshDbContext.js";
+import KoshDbContext from "../../../../../../server/model/KoshDbContext.js";
 
 @Prepare.authorize
 export default class extends Page {

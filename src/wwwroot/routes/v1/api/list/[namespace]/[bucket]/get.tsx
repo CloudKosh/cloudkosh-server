@@ -1,15 +1,22 @@
 import Page from "@entity-access/server-pages/dist/Page.js";
-import { requireAuthorization } from "../../../../../common/requireAuthorization.js";
 import { Query } from "@entity-access/server-pages/dist/core/Query.js";
 import Inject from "@entity-access/entity-access/dist/di/di.js";
-import BucketService from "../../../../../server/services/bucket/BucketService.js";
-import KoshDbContext from "../../../../../server/model/KoshDbContext.js";
 import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
-import BucketFile from "../../../../../server/model/entities/BucketFile.js";
 import { IOrderedEntityQuery } from "@entity-access/entity-access/dist/model/IFilterWithParameter.js";
+import { requireAuthorization } from "../../../../../../../common/requireAuthorization.js";
+import KoshDbContext from "../../../../../../../server/model/KoshDbContext.js";
+import BucketFile from "../../../../../../../server/model/entities/BucketFile.js";
+import BucketService from "../../../../../../../server/services/bucket/BucketService.js";
+import { Route } from "@entity-access/server-pages/dist/core/Route.js";
 
 @requireAuthorization
 export default class extends Page {
+
+    @Route("namespace")
+    namespace: string;
+
+    @Route("bucket")
+    bucket: string;
 
     @Query("start")
     start = 0;
@@ -34,9 +41,7 @@ export default class extends Page {
     
     async run() {
 
-        const [namespace, ... bucketPath] = this.childPath;
-
-        const bucket = await this.bucketService.getBucket(namespace, bucketPath.join("/"));
+        const bucket = await this.bucketService.getBucket(this.namespace, this.bucket);
 
         const {
             prefix,

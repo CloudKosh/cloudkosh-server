@@ -1,10 +1,10 @@
 import Page from "@entity-access/server-pages/dist/Page.js";
-import { requireAuthorization } from "../../../../../../../../common/requireAuthorization.js";
 import Inject from "@entity-access/entity-access/dist/di/di.js";
-import BucketFileService from "../../../../../../../../server/services/files/BucketFileService.js";
 import { Route } from "@entity-access/server-pages/dist/core/Route.js";
 import { TempFileResult } from "@entity-access/server-pages/dist/Content.js";
-import BucketService from "../../../../../../../../server/services/bucket/BucketService.js";
+import { requireAuthorization } from "../../../../../../../common/requireAuthorization.js";
+import BucketService from "../../../../../../../server/services/bucket/BucketService.js";
+import BucketFileService from "../../../../../../../server/services/files/BucketFileService.js";
 
 @requireAuthorization
 export default class extends Page {

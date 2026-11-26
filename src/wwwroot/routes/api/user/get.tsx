@@ -1,3 +1,3 @@
-import GetPage from "../../v1/api/login/get.js";
+import GetPage from "../../v1/api/auth/login/get.js";
 
 export default GetPage;
