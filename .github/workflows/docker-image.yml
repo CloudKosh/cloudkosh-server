@@ -57,12 +57,12 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ghcr.io/cloudkosh/cloud-kosh-server:latest
-              labels: |
-                org.opencontainers.image.title=Cloud Kosh Server
-                org.opencontainers.image.description=Cloud Kosh Server
-                org.opencontainers.image.source=https://github.com/cloudkosh/cloudkosh-server
-                org.opencontainers.image.revision=${{ github.sha }}
-                org.opencontainers.image.licenses=MIT
+          labels: |
+            org.opencontainers.image.title=Cloud Kosh Server
+            org.opencontainers.image.description=Cloud Kosh Server
+            org.opencontainers.image.source=https://github.com/cloudkosh/cloudkosh-server
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.licenses=MIT
 
       - name: Build and push with db
         id: push
@@ -72,12 +72,12 @@ jobs:
           file: ./Dockerfile.WithDb
           push: true
           tags: ghcr.io/cloudkosh/cloud-kosh-server-with-db:latest
-              labels: |
-                org.opencontainers.image.title=Cloud Kosh Server with Postgres
-                org.opencontainers.image.description=Cloud Kosh Server With Embedded Postgres
-                org.opencontainers.image.source=https://github.com/cloudkosh/cloudkosh-server
-                org.opencontainers.image.revision=${{ github.sha }}
-                org.opencontainers.image.licenses=MIT
+          labels: |
+            org.opencontainers.image.title=Cloud Kosh Server with Postgres
+            org.opencontainers.image.description=Cloud Kosh Server With Embedded Postgres
+            org.opencontainers.image.source=https://github.com/cloudkosh/cloudkosh-server
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.licenses=MIT
       
       # This step generates an artifact attestation for the image, which is an unforgeable statement about where and how it was built. It increases supply chain security for people who consume the image. For more information, see [Using artifact attestations to establish provenance for builds](/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds).
       - name: Generate artifact attestation
