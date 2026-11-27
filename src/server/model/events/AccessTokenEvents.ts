@@ -25,6 +25,13 @@ export default class AccessTokenEvents extends AuthenticatedEvents<AccessToken> 
     }
 
     beforeInsert(entity: AccessToken, entry: ChangeEntry<AccessToken>) {
+        if(!this.sessionUser.isAdmin) {
+            entity.userID = entity.userID;
+        } else {
+            if(!entity.userID) {
+                entity.userID = this.sessionUser.userID;
+            }
+        }
         entity.secretHash = Buffer.alloc(0);
     }
 
