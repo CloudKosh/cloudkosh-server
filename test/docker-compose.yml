@@ -1,6 +1,20 @@
 # docker-compose.yml
 version: "3"
 services:
+
+  cloudkosh-pg-db:
+    image: postgis/postgis:18-3.6-alpine
+    container_name: cloudkosh-pg-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=abcd123
+    ports:
+      - 5432:5432
+    volumes:
+      - ck-sockets:/var/run/postgresql
+    networks:
+      - ck_network    
+
   proxy:
     image: ghcr.io/social-mail/yarp-container:latest
     container_name: cloudkosh-proxy
@@ -37,9 +51,11 @@ services:
       - CLOUD_KOSH_DB_SSL=false
       - CLOUD_KOSH_PUBLIC_KEY=92349239434797
       - CLOUDKOSH_TEST_MODE=true
+      - CLOUD_KOSH_DB_HOST=/var/run/postgresql
       - NODE_TEST=yes
       - PG_TEST=test
     volumes:
+      - ck-sockets:/var/run/postgresql
       - ck-sockets:/sockets
       - ck-cache:/cache
     ports:
