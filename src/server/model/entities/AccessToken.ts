@@ -7,8 +7,18 @@ import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 import Sql from "@entity-access/entity-access/dist/sql/Sql.js";
 import Namespace from "./Namespace.js";
 import Bucket from "./Bucket.js";
+import Index from "@entity-access/entity-access/dist/decorators/Index.js";
 
 @Table("AccessTokens")
+@Index({
+    name: "UX_AccessTokens_Title",
+    columns: [
+        { name: (x) => x.userID, descending: false },
+        { name: (x) => x.title, descending: false },
+    ],
+    filter: (x) => x.title !== null,
+    unique: true
+})
 export default class AccessToken {
 
     @Column({ dataType: "BigInt", key: true, generated: "identity" })
