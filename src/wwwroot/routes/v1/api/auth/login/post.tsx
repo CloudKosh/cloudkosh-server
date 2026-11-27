@@ -5,10 +5,10 @@ import EntityAccessError from "@entity-access/entity-access/dist/common/EntityAc
 import KoshDbContext from "../../../../../../server/model/KoshDbContext.js";
 import LoginSessionService from "../../../../../../server/services/auth/LoginSessionService.js";
 import RateLimiterService from "../../../../../../server/services/rate-limiter/RateLimiterService.js";
-import { hash } from "node:crypto";
 import DateTime from "@entity-access/entity-access/dist/types/DateTime.js";
 import EncryptionService from "../../../../../../server/services/encryption/EncryptionService.js";
 import { globalEnv } from "../../../../../../globalEnv.js";
+import HashService from "../../../../../../server/services/hash/HashService.js";
 
 @Prepare.authorize
 @Prepare.parseJsonBody
@@ -21,6 +21,8 @@ export default class extends Page {
     @Inject rls: RateLimiterService;
 
     @Inject es: EncryptionService;
+
+    @Inject hash: HashService;
 
     async run () {
         
@@ -38,7 +40,9 @@ export default class extends Page {
             throw new EntityAccessError(`Access Token ${key} not found`);
         }
 
-        const h = hash("sha256", nonce + at.secretHash, "base64"); 
+        const decryptedSecret = this.es.general.decrypt(at.encryptedSecret);
+
+        const h = this.hash.hash(decryptedSecret, nonce); 
         if(sha256Base64 !== h) {
             throw new EntityAccessError(`Invalid secret`);
         }

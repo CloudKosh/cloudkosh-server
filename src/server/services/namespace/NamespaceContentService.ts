@@ -57,7 +57,7 @@ export default class NamespaceContentService {
 
     async save(namespaceID, file: LocalFile) {
 
-        const sha256 = await this.hashService.hash(file);
+        const sha256 = await this.hashService.hashFile(file);
 
         // we are assuming that 256mb would be saved in 90 seconds...
         // however even blocks of 64mb can be saved..

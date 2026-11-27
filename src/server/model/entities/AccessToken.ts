@@ -45,8 +45,8 @@ export default class AccessToken {
     })
     bucketID: number;
 
-    @Column({ dataType: "ByteArray" })
-    secretHash: Buffer;
+    @Column({ dataType: "Char" })
+    encryptedSecret: string;
 
     @Column({ dataType: "Char", length: 400, nullable: true})
     title: string;

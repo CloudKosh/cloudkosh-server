@@ -4,23 +4,23 @@ import AuthenticatedEvents from "./AuthenticatedEvents.js";
 import { newID } from "../../../common/newID.js";
 import Inject from "@entity-access/entity-access/dist/di/di.js";
 import KoshDbContext from "../KoshDbContext.js";
-import HashService from "../../services/hash/HashService.js";
+import EncryptionService from "../../services/encryption/EncryptionService.js";
 
 export default class AccessTokenEvents extends AuthenticatedEvents<AccessToken> {
 
     @Inject
-    hs: HashService;
+    es: EncryptionService;
 
     @Inject
     db: KoshDbContext;
 
     async afterInsert(entity: AccessToken, entry: ChangeEntry<AccessToken>) {
         entity.displaySecret = `ck-${entity.tokenID}-${newID()}`;
-        const secretHash = await this.hs.hash(entity.displaySecret);
+        const encryptedSecret = await this.es.general.encrypt(entity.displaySecret);
         await this.db.accessTokens
             .withKeys({ tokenID: entity.tokenID})
             .update({
-                secretHash
+                encryptedSecret
             });
     }
 
@@ -32,12 +32,7 @@ export default class AccessTokenEvents extends AuthenticatedEvents<AccessToken> 
                 entity.userID = this.sessionUser.userID;
             }
         }
-        entity.secretHash = Buffer.alloc(0);
-    }
-
-    preJson(entity: AccessToken): AccessToken {
-        entity.secretHash = void 0;
-        return entity;
+        entity.encryptedSecret = "";
     }
 
 }
