@@ -17,6 +17,7 @@ WORKDIR /app
 
 ENV HOST=0.0.0.0
 ENV SELF_HOST=true
+ENTRYPOINT ["/sbin/tini", "--", "npm", "start"]
 
 COPY package*.json ./
 
