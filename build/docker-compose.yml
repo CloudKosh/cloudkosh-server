@@ -1,0 +1,18 @@
+version: '3.4'
+name: cloud-kosh-build
+services:
+  cloud-kosh-server-with-db:
+    restart: always
+    container_name: cloud-kosh-server-with-db
+    image: ghcr.io/cloudkosh/cloud-kosh-server-with-db
+    build:
+      context: ../
+      dockerfile: Dockerfile.WithDb
+
+  cloud-kosh-server:
+    restart: always
+    container_name: cloud-kosh-server
+    image: ghcr.io/cloudkosh/cloud-kosh-server
+    build:
+      context: ../
+      dockerfile: Dockerfile

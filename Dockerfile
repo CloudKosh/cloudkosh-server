@@ -1,4 +1,6 @@
-FROM ghcr.io/social-mail/postgres-with-backups:latest
+# Version 1
+FROM node:26-alpine
+RUN apk add tini openssl 7zip
 
 ENV POSTGRES_PASSWORD=kosh123
 
@@ -8,13 +10,10 @@ ENV CLOUD_KOSH_DB_PORT=5432
 ENV CLOUD_KOSH_DB_USER=postgres
 ENV CLOUD_KOSH_DB_PASSWORD=kosh123
 ENV CLOUD_KOSH_ADMIN_EMAIL=admin@admin
-ENV APP_HOST=v2025-test.800casting.com
-ENV NODE_APP=/app/index.js
 
 VOLUME /data
 VOLUME /cache
 WORKDIR /app
-
 
 ENV HOST=0.0.0.0
 ENV SELF_HOST=true
