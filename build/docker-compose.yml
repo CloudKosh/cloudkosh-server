@@ -3,16 +3,16 @@ name: cloud-kosh-build
 services:
   cloud-kosh-server-with-db:
     restart: always
-    container_name: cloud-kosh-server-with-db
-    image: ghcr.io/cloudkosh/cloud-kosh-server-with-db
+    container_name: cloudkosh-server-with-db
+    image: ghcr.io/cloudkosh/cloudkosh-server-with-db
     build:
       context: ../
       dockerfile: Dockerfile.WithDb
 
   cloud-kosh-server:
     restart: always
-    container_name: cloud-kosh-server
-    image: ghcr.io/cloudkosh/cloud-kosh-server
+    container_name: cloudkosh-server
+    image: ghcr.io/cloudkosh/cloudkosh-server
     build:
       context: ../
       dockerfile: Dockerfile
