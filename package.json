@@ -1,6 +1,6 @@
 {
   "name": "@cloud-kosh/cloud-kosh-server",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "## Phase 1",
   "main": "index.js",
   "type": "module",
