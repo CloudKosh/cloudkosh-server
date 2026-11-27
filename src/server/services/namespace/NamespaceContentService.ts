@@ -27,9 +27,9 @@ export default class NamespaceContentService {
     private diskCache: DiskCacheService;
 
     async download(content: NamespaceContent) {
-        const { namespaceID, contentID, sha256 } = content;
+        const { namespaceID, sha256, keyPath } = content;
 
-        const path = `local-content-cache/${contentID}`;
+        const path = `local-content-cache/${keyPath}`;
 
         return await this.diskCache.getOrCreateAsync(path, async (lf) =>{
 
@@ -101,7 +101,12 @@ export default class NamespaceContentService {
 
             const { contentID } = c;
 
-            c.keyPath = keyPath = `${sha256.toString("hex")}/${c.contentID}`;
+            keyPath = `${sha256.toString("hex")}/${c.contentID}`;
+
+            // 2 level of directories are better for local file caching
+            keyPath = `${keyPath.substring(0,2)}/${keyPath.substring(2,4)}/${keyPath}`;
+
+            c.keyPath = keyPath;
             await db.namespaceContents.withKeys({
                 namespaceID,
                 contentID,
